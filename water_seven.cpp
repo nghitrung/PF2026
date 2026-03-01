@@ -90,7 +90,7 @@ int damageEvaluation(int shipHP, int repairCost){
 
     bool condition1 = (shipHP < 455);
 
-    bool condition2 = isPerfect(sumDigits(shipHP));
+    bool condition2 = isPerfect(shipHP);
 
     if (condition1 && condition2) {
         return (repairCost + (int)round(repairCost * 0.5));
@@ -107,21 +107,7 @@ int conflictSimulation(
     // TODO
     int listEvent[6] = {255, 20, 50, 70, 90, 100};
 
-    int luffyIdx = -1;
-    int usoppIdx = -1;
-
-    for (int i = 0; i < FIXED_CHARACTER; i++) {
-        if (strcmp(character[i], "LUFFY") == 0) luffyIdx = i;
-        if (strcmp(character[i], "USOPP") == 0) usoppIdx = i;
-    }
-
-    int skill_luffy = -1;
-    int skill_usopp = -1;
-
-    if (luffyIdx != -1 && usoppIdx != -1) {
-        skill_luffy = skill[luffyIdx];
-        skill_usopp = skill[usoppIdx];
-    } 
+    takeValuation(character, hp, skill, shipHP, repairCost);
 
     int numEvent = 0; 
     int conflictIndex = skill_luffy - skill_usopp + (repairCost / 100) + ((500 - shipHP) / 50);
@@ -139,18 +125,16 @@ int conflictSimulation(
 }
 
 // Task 3
-void resolveDuel(
-    char character[FIXED_CHARACTER][MAX_NAME], int hp[FIXED_CHARACTER], int skill[FIXED_CHARACTER],
-    int conflictIndex, int repairCost, char duel[FIXED_CHARACTER][MAX_NAME]){
-        //TODO: Output assign to duel parameter
-    }
+void resolveDuel(char character[FIXED_CHARACTER][MAX_NAME], int hp[FIXED_CHARACTER], int skill[FIXED_CHARACTER], int conflictIndex, int repairCost, char duel[FIXED_CHARACTER][MAX_NAME]){
+    //TODO: Output assign to duel parameter
+    
+    return;
+}
 
 // Task 4
-void decodeCP9Message(char character[FIXED_CHARACTER][MAX_NAME], 
-    int hp[FIXED_CHARACTER], int skill[FIXED_CHARACTER], int conflictIndex, 
-    int repairCost, char cipherText[], char resultText[]){
-        //TODO: Output assign to resultText parameter
-    }
+void decodeCP9Message(char character[FIXED_CHARACTER][MAX_NAME], int hp[FIXED_CHARACTER], int skill[FIXED_CHARACTER], int conflictIndex, int repairCost, char cipherText[], char resultText[]){
+    //TODO: Output assign to resultText parameter
+}
 
 // Task 5
 int analyzeDangerLimit(int grid[MAX_GRID][MAX_GRID], int rows, int cols){
@@ -165,8 +149,7 @@ bool evaluateRoute(int grid[MAX_GRID][MAX_GRID], int rows, int cols, int dangerL
 }
 
 // HELPER FUNCTION
-
-int sumDigits(int n) {
+bool isPerfect(int n) {
     int sum = 0;
     n = abs(n);
 
@@ -175,19 +158,33 @@ int sumDigits(int n) {
         n /= 10;
     }
 
-    return sum;
-}
+    if (sum <= 1) return false;
 
-bool isPerfect(int n) {
-    if (n <= 1) return false;
-
-    int sum = 0;
-    for (int i = 1; i <= n / 2; i++) {
-        if (n % i == 0) sum += i;
+    int nums = 0;
+    for (int i = 1; i <= sum / 2; i++) {
+        if (sum % i == 0) nums += i;
     }
 
-    return (sum == n);
+    return (nums == sum);
 }
+
+void takeValuation(char character[FIXED_CHARACTER][MAX_NAME], int hp[FIXED_CHARACTER], int skill[FIXED_CHARACTER],int shipHP, int repairCost) {
+
+    int charIdx = 0;
+    for (int i = 0; i < FIXED_CHARACTER; i++) {
+        if (strcmp(character[i], "LUFFY") == 0) skill_luffy = skill[i];
+        if (strcmp(character[i], "USOPP") == 0) skill_usopp = skill[i];
+
+        strcpy(supChar[charIdx], character[i]);
+        sup[charIdx] = skill[i];
+        cost[charIdx] = (hp[i] % 10) + 1;
+
+        charIdx++;
+    }
+
+}
+
+
 
 ////////////////////////////////////////////////
 /// END OF STUDENT'S ANSWER

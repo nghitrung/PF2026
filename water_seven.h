@@ -15,6 +15,14 @@ const int MAX_NAME = 100;
 const int FIXED_CHARACTER = 7;
 const int MAX_GRID = 50;
 
+// HELPER VARIABLES
+static int skill_luffy = -1;
+static int skill_usopp = -1;
+static char supChar[FIXED_CHARACTER][MAX_NAME];
+static int sup[FIXED_CHARACTER];
+static int cost[FIXED_CHARACTER];
+
+
 ////////////////////////////////////////////////////////////////////////
 /// STUDENT'S ANSWER BEGINS HERE
 /// Complete the following functions
@@ -52,11 +60,11 @@ int analyzeDangerLimit(int grid[MAX_GRID][MAX_GRID], int rows, int cols);
 bool evaluateRoute(int grid[MAX_GRID][MAX_GRID], int rows, int cols, int dangerLimit);
 
 //HELPER FUNCTION
-int sumDigits(int n);
 bool isPerfect(int n);
+void takeValuation(char character[FIXED_CHARACTER][MAX_NAME], int hp[FIXED_CHARACTER], int skill[FIXED_CHARACTER], int shipHP, int repairCost);
 
 ////////////////////////////////////////////////
 /// END OF STUDENT'S ANSWER
 ////////////////////////////////////////////////
 
-#endif // _WATER_SEVEN_CAMPAIGN_H_
+#endif // _WATER_SEVEN_CAMPAIGN_H_ 

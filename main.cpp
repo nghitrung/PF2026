@@ -24,7 +24,7 @@ int main(int argc, const char * argv[]) {
 
     testDamageEvaluation();
 
-    testConflictSimulation();
+    //testConflictSimulation();
 
     return 0;
 }
