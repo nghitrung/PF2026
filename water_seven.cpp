@@ -119,20 +119,19 @@ int conflictSimulation(
     int skill_usopp = -1;
 
     if (luffyIdx != -1 && usoppIdx != -1) {
-        int skill_luffy = skill[luffyIdx];
-        int skill_usopp = skill[usoppIdx];
+        skill_luffy = skill[luffyIdx];
+        skill_usopp = skill[usoppIdx];
     } 
 
     int numEvent = 0; 
-    int conflictIndex = -1;
+    int conflictIndex = skill_luffy - skill_usopp + (repairCost / 100) + ((500 - shipHP) / 50);
     int id = -1; 
 
-    while (numEvent < 10 || conflictIndex < 255) {
-        conflictIndex = skill_luffy - skill_usopp + (repairCost / 100) + ((500 - shipHP) / 50);
-
+    while (numEvent < 10 && conflictIndex < 255) {
         id = conflictIndex % 6;
 
         conflictIndex += listEvent[id];
+
         numEvent++;
     }
 
