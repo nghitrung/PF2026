@@ -21,4 +21,8 @@
 using namespace std;
 // The library here is concretely set, students are not allowed to include any other libraries.
 
+void testReadInput();
+void testDamageEvaluation();
+void testConflictSimulation();
+
 #endif //_MAIN_H_

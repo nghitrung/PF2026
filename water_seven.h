@@ -51,6 +51,10 @@ void decodeCP9Message(char character[FIXED_CHARACTER][MAX_NAME],
 int analyzeDangerLimit(int grid[MAX_GRID][MAX_GRID], int rows, int cols);
 bool evaluateRoute(int grid[MAX_GRID][MAX_GRID], int rows, int cols, int dangerLimit);
 
+//HELPER FUNCTION
+int sumDigits(int n);
+bool isPerfect(int n);
+
 ////////////////////////////////////////////////
 /// END OF STUDENT'S ANSWER
 ////////////////////////////////////////////////

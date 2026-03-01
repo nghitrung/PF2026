@@ -12,18 +12,26 @@
 
 using namespace std;
 
-
+char character[FIXED_CHARACTER][MAX_NAME]; 
+int hp[FIXED_CHARACTER];
+int skill[FIXED_CHARACTER];
+int shipHP = 0;
+int repairCost = 0;
 
 int main(int argc, const char * argv[]) {
+    
+    //testReadInput();
 
-    char character[FIXED_CHARACTER][MAX_NAME]; 
-    int hp[FIXED_CHARACTER];
-    int skill[FIXED_CHARACTER];
-    int shipHP = 0;
-    int repairCost = 0;
+    testDamageEvaluation();
 
-    //string filename = "opw_tc_01_input";
-    string filename = "opw_tc_02_input";
+    testConflictSimulation();
+
+    return 0;
+}
+
+void testReadInput() {
+    string filename = "opw_tc_01_input";
+    //string filename = "opw_tc_02_input";
     
     cout << "--- READING FILE: " << filename << " ---" << endl;
 
@@ -46,6 +54,59 @@ int main(int argc, const char * argv[]) {
     } else {
         cout << "READING UNSUCCESSFUL" << endl;
     }
-    
-    return 0;
+}
+
+void testDamageEvaluation() {
+    cout << "====================================================" << endl;
+    cout << "   DAMAGE EVALUATION (TASK 1)          " << endl;
+    cout << "====================================================" << endl;
+    cout << left << setw(10) << "STT" << setw(12) << "shipHP" << setw(12) << "Repair" << setw(12) << "Output" << "Expected" << endl;
+    cout << string(60, '-') << endl;
+
+    // Danh sach cac test cases
+    struct TestCase {
+        int shipHP;
+        int repairCost;
+        int expected;
+    } 
+    tests[] = {
+        // Truong hop 1: shipHP < 455
+        {300, 1000, 1000},
+        {454, 100,  100},
+        
+        // Truong hop 2: Tong chu so la so hoan hao (6, 28, ...)
+        {123, 500,  750}, 
+        {411, 253, 380},
+        
+        // Truong hop 3: Bien (Edge cases)
+        {500, -10,  -10},
+        {-50, 100,  100}
+    };
+
+    int n = sizeof(tests) / sizeof(tests[0]);
+    for (int i = 0; i < n; i++) {
+        int result = damageEvaluation(tests[i].shipHP, tests[i].repairCost);
+        cout << left << setw(10) << i 
+             << setw(12) << tests[i].shipHP 
+             << setw(12) << tests[i].repairCost 
+             << setw(12) << result 
+             << setw(12) << tests[i].expected << endl;
+
+    }
+    cout << "====================================================" << endl << endl;
+}
+
+void testConflictSimulation() {
+    cout << "====================================================" << endl;
+    cout << "   CONFLICT SIMULATION (TASK 2)        " << endl;
+    cout << "====================================================" << endl;
+
+    testReadInput();
+
+    int result = -1;
+    for (int i = 0; i < FIXED_CHARACTER; i++) {
+        result = conflictSimulation(character, hp, skill, shipHP, repairCost);
+    }
+
+    cout << "ConflictIndex: " << result << endl;
 }

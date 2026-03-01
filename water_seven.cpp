@@ -87,16 +87,57 @@ bool readInput(
 // Task 1
 int damageEvaluation(int shipHP, int repairCost){
     // TODO
-    return 0;
+
+    bool condition1 = (shipHP < 455);
+
+    bool condition2 = isPerfect(sumDigits(shipHP));
+
+    if (condition1 && condition2) {
+        return (repairCost + (int)round(repairCost * 0.5));
+    } else {
+        return repairCost;
+    }
+    
 }
 
 // Task 2
 int conflictSimulation(
     char character[FIXED_CHARACTER][MAX_NAME], int hp[FIXED_CHARACTER], int skill[FIXED_CHARACTER],
-    int shipHP, int repairCost){
-        // TODO
-        return 0;
+    int shipHP, int repairCost) {
+    // TODO
+    int listEvent[6] = {255, 20, 50, 70, 90, 100};
+
+    int luffyIdx = -1;
+    int usoppIdx = -1;
+
+    for (int i = 0; i < FIXED_CHARACTER; i++) {
+        if (strcmp(character[i], "LUFFY") == 0) luffyIdx = i;
+        if (strcmp(character[i], "USOPP") == 0) usoppIdx = i;
     }
+
+    int skill_luffy = -1;
+    int skill_usopp = -1;
+
+    if (luffyIdx != -1 && usoppIdx != -1) {
+        int skill_luffy = skill[luffyIdx];
+        int skill_usopp = skill[usoppIdx];
+    } 
+
+    int numEvent = 0; 
+    int conflictIndex = -1;
+    int id = -1; 
+
+    while (numEvent < 10 || conflictIndex < 255) {
+        conflictIndex = skill_luffy - skill_usopp + (repairCost / 100) + ((500 - shipHP) / 50);
+
+        id = conflictIndex % 6;
+
+        conflictIndex += listEvent[id];
+        numEvent++;
+    }
+
+    return conflictIndex;
+}
 
 // Task 3
 void resolveDuel(
@@ -124,6 +165,30 @@ bool evaluateRoute(int grid[MAX_GRID][MAX_GRID], int rows, int cols, int dangerL
     return false;
 }
 
+// HELPER FUNCTION
+
+int sumDigits(int n) {
+    int sum = 0;
+    n = abs(n);
+
+    while (n > 0) {
+        sum += n % 10;
+        n /= 10;
+    }
+
+    return sum;
+}
+
+bool isPerfect(int n) {
+    if (n <= 1) return false;
+
+    int sum = 0;
+    for (int i = 1; i <= n / 2; i++) {
+        if (n % i == 0) sum += i;
+    }
+
+    return (sum == n);
+}
 
 ////////////////////////////////////////////////
 /// END OF STUDENT'S ANSWER
