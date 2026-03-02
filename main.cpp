@@ -22,32 +22,35 @@ int main(int argc, const char * argv[]) {
     
     //testReadInput();
 
-    testDamageEvaluation();
+    //testDamageEvaluation();
 
     //testConflictSimulation();
+
+    testResolveDuel();
 
     return 0;
 }
 
 void testReadInput() {
+    cout << "====================================================" << endl;
+    cout << "   READ INPUT (TASK 0)          " << endl;
+    cout << "====================================================" << endl;
+
     string filename = "opw_tc_01_input";
     //string filename = "opw_tc_02_input";
     
-    cout << "--- READING FILE: " << filename << " ---" << endl;
+    cout << "--- READING FILE: " << filename << " SUCCESSFULL ---" << endl;
 
     bool success = readInput(filename, character, hp, skill, shipHP, repairCost);
 
     if (success) {
-        cout << "READING SUCCESSFULL" << endl;
-        cout << "-------------------" << endl;
         cout << left << setw(15) << "Name" << setw(10) << "HP" << setw(10) << "Skill" << endl;
-        cout << "-------------------" << endl;
 
         for (int i = 0; i < FIXED_CHARACTER; i++) {
             cout << left << setw(15) << character[i] << setw(10) << hp[i] << setw(10) << skill[i] << endl;
         }
 
-        cout << "------------------" << endl;
+        cout << "====================================================" << endl;
         cout << "INFORMATION OF MERRY: " << endl;
         cout << "- HP Ship: " << shipHP << endl;
         cout << "- Repair Ship Cost: " << repairCost << endl;
@@ -109,4 +112,16 @@ void testConflictSimulation() {
     }
 
     cout << "ConflictIndex: " << result << endl;
+}
+
+void testResolveDuel() {
+    testReadInput();
+    
+    cout << "====================================================" << endl;
+    cout << "       RESOLVE DUEL (TASK 3)          " << endl;
+    cout << "====================================================" << endl;
+
+    resolveDuel(character, hp, skill, 120, repairCost, 0);
+
+    cout << "====================================================" << endl;
 }

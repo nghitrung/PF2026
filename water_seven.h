@@ -16,11 +16,11 @@ const int FIXED_CHARACTER = 7;
 const int MAX_GRID = 50;
 
 // HELPER VARIABLES
+const int SUPPORT_CHARACTER = 5;
+const int SUPPORT_DETAIL = 2;
 static int skill_luffy = -1;
 static int skill_usopp = -1;
-static char supChar[FIXED_CHARACTER][MAX_NAME];
-static int sup[FIXED_CHARACTER];
-static int cost[FIXED_CHARACTER];
+static int supChar[SUPPORT_CHARACTER][SUPPORT_DETAIL]; // [support, cost]
 
 
 ////////////////////////////////////////////////////////////////////////
@@ -62,6 +62,7 @@ bool evaluateRoute(int grid[MAX_GRID][MAX_GRID], int rows, int cols, int dangerL
 //HELPER FUNCTION
 bool isPerfect(int n);
 void takeValuation(char character[FIXED_CHARACTER][MAX_NAME], int hp[FIXED_CHARACTER], int skill[FIXED_CHARACTER], int shipHP, int repairCost);
+void sort();
 
 ////////////////////////////////////////////////
 /// END OF STUDENT'S ANSWER

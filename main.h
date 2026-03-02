@@ -24,5 +24,6 @@ using namespace std;
 void testReadInput();
 void testDamageEvaluation();
 void testConflictSimulation();
+void testResolveDuel();
 
 #endif //_MAIN_H_

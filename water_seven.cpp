@@ -5,6 +5,7 @@
 /// Complete the following functions
 /// DO NOT modify any parameters in the functions.
 ////////////////////////////////////////////////////////////////////////
+
 //Task 0
 bool readInput(
     const string &filename,
@@ -127,7 +128,16 @@ int conflictSimulation(
 // Task 3
 void resolveDuel(char character[FIXED_CHARACTER][MAX_NAME], int hp[FIXED_CHARACTER], int skill[FIXED_CHARACTER], int conflictIndex, int repairCost, char duel[FIXED_CHARACTER][MAX_NAME]){
     //TODO: Output assign to duel parameter
-    
+    takeValuation(character, hp, skill, 0, repairCost);
+
+    cout << left << setw(10) << "Support" << setw(10) << "Cost" << endl;
+    for (int i = 0; i < SUPPORT_CHARACTER; i++) {
+        cout << left << setw(10) << (int)supChar[i][0] 
+             << setw(10) << (int)supChar[i][1] << endl;
+    }
+
+    int U = skill_usopp + (conflictIndex / 20) + (repairCost / 500);
+
     return;
 }
 
@@ -169,19 +179,42 @@ bool isPerfect(int n) {
 }
 
 void takeValuation(char character[FIXED_CHARACTER][MAX_NAME], int hp[FIXED_CHARACTER], int skill[FIXED_CHARACTER],int shipHP, int repairCost) {
-
     int charIdx = 0;
+
     for (int i = 0; i < FIXED_CHARACTER; i++) {
-        if (strcmp(character[i], "LUFFY") == 0) skill_luffy = skill[i];
-        if (strcmp(character[i], "USOPP") == 0) skill_usopp = skill[i];
-
-        strcpy(supChar[charIdx], character[i]);
-        sup[charIdx] = skill[i];
-        cost[charIdx] = (hp[i] % 10) + 1;
-
-        charIdx++;
+        if (strcmp(character[i], "LUFFY") == 0){
+            skill_luffy = skill[i];
+        } else if (strcmp(character[i], "USOPP") == 0){
+            skill_usopp = skill[i];
+        } else {
+            if (charIdx < SUPPORT_CHARACTER) {
+                supChar[charIdx][0] = skill[i];
+                supChar[charIdx][1] = (hp[i] % 10) + 1;        
+                charIdx++;            
+            }
+        }
     }
 
+    sort();
+}
+
+void sort() {
+    for (int i = 0; i < SUPPORT_CHARACTER - 1; i++) {
+        int min = i;
+        for (int j = i + 1; j < SUPPORT_CHARACTER; j++) {
+            if (supChar[j][1] < supChar[min][1]){
+                min = j;
+            }
+        }
+
+        if (min != i) {
+            for (int k = 0; k < SUPPORT_CHARACTER; k++) {
+                int temp = supChar[i][k];
+                supChar[i][k] = supChar[min][k];
+                supChar[min][k] = temp;
+            }
+        }
+    }
 }
 
 
