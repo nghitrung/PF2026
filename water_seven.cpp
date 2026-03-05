@@ -129,11 +129,36 @@ int conflictSimulation(
 void resolveDuel(char character[FIXED_CHARACTER][MAX_NAME], int hp[FIXED_CHARACTER], int skill[FIXED_CHARACTER], int conflictIndex, int repairCost, char duel[FIXED_CHARACTER][MAX_NAME]){
     //TODO: Output assign to duel parameter
     takeValuation(character, hp, skill, 0, repairCost);
+    char supCharName[SUPPORT_CHARACTER][MAX_NAME];
 
-    cout << left << setw(10) << "Support" << setw(10) << "Cost" << endl;
+    int supIdx = 0;
+    int count = 0;
+
+    while (supIdx < SUPPORT_CHARACTER) {
+        if (supChar[supIdx][0] == skill[count]) {
+            if (strcmp(character[count], "LUFFY") != 0 && strcmp(character[count], "USOPP") != 0) {
+                //for (int i = 0; i < SUPPORT_CHARACTER; i++) {
+                    //if (strcmp(supCharName[count], supCharName[i]) != 0) {
+                        strcpy(supCharName[supIdx],character[count]);
+                        supIdx++;
+                        count = 0;
+                    // }
+                //}
+                cout << "in if - " << supIdx << endl;
+
+            } else {
+                count++;
+            }
+        } else {
+            //cout << "in else - " << supIdx << endl;
+            count++;
+        }
+    }
+
+    cout << left << setw(10) << "Name" << setw(10) << "Support" << setw(10) << "Cost" << endl;
     for (int i = 0; i < SUPPORT_CHARACTER; i++) {
-        cout << left << setw(10) << (int)supChar[i][0] 
-             << setw(10) << (int)supChar[i][1] << endl;
+        cout << left << setw(10)<< supCharName[i] << setw(10) << supChar[i][0] 
+             << setw(10) << supChar[i][1] << endl;
     }
 
     int U = skill_usopp + (conflictIndex / 20) + (repairCost / 500);

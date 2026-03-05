@@ -36,8 +36,8 @@ void testReadInput() {
     cout << "   READ INPUT (TASK 0)          " << endl;
     cout << "====================================================" << endl;
 
-    string filename = "opw_tc_01_input";
-    //string filename = "opw_tc_02_input";
+    //string filename = "opw_tc_01_input";
+    string filename = "opw_tc_02_input";
     
     cout << "--- READING FILE: " << filename << " SUCCESSFULL ---" << endl;
 
