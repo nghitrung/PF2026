@@ -62,7 +62,8 @@ bool evaluateRoute(int grid[MAX_GRID][MAX_GRID], int rows, int cols, int dangerL
 //HELPER FUNCTION
 bool isPerfect(int n);
 void takeValuation(char character[FIXED_CHARACTER][MAX_NAME], int hp[FIXED_CHARACTER], int skill[FIXED_CHARACTER], int shipHP, int repairCost);
-void sort();
+int partition(int arr[SUPPORT_CHARACTER][SUPPORT_DETAIL], int l, int r);
+void quickSort(int arr[SUPPORT_CHARACTER][SUPPORT_DETAIL], int l, int r);
 
 ////////////////////////////////////////////////
 /// END OF STUDENT'S ANSWER

@@ -20,11 +20,11 @@ int repairCost = 0;
 
 int main(int argc, const char * argv[]) {
     
-    //testReadInput();
+    testReadInput();
 
-    //testDamageEvaluation();
+    testDamageEvaluation();
 
-    //testConflictSimulation();
+    testConflictSimulation();
 
     testResolveDuel();
 
@@ -36,8 +36,8 @@ void testReadInput() {
     cout << "   READ INPUT (TASK 0)          " << endl;
     cout << "====================================================" << endl;
 
-    //string filename = "opw_tc_01_input";
-    string filename = "opw_tc_02_input";
+    string filename = "opw_tc_01_input";
+    //string filename = "opw_tc_02_input";
     
     cout << "--- READING FILE: " << filename << " SUCCESSFULL ---" << endl;
 
@@ -121,7 +121,12 @@ void testResolveDuel() {
     cout << "       RESOLVE DUEL (TASK 3)          " << endl;
     cout << "====================================================" << endl;
 
-    resolveDuel(character, hp, skill, 120, repairCost, 0);
+    char duel[FIXED_CHARACTER][MAX_NAME];
+    for (int i = 0; i < FIXED_CHARACTER; i++) {
+        duel[i][0] = '\0';
+    }
+
+    resolveDuel(character, hp, skill, 120, repairCost, duel);
 
     cout << "====================================================" << endl;
 }

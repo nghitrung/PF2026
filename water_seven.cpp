@@ -127,34 +127,26 @@ int conflictSimulation(
 
 // Task 3
 void resolveDuel(char character[FIXED_CHARACTER][MAX_NAME], int hp[FIXED_CHARACTER], int skill[FIXED_CHARACTER], int conflictIndex, int repairCost, char duel[FIXED_CHARACTER][MAX_NAME]){
-    //TODO: Output assign to duel parameter
+    //TODO: Output assign to duel parameter    
+
     takeValuation(character, hp, skill, 0, repairCost);
     char supCharName[SUPPORT_CHARACTER][MAX_NAME];
 
     int supIdx = 0;
-    int count = 0;
+    bool isUsed[FIXED_CHARACTER] = {false};
 
     while (supIdx < SUPPORT_CHARACTER) {
-        if (supChar[supIdx][0] == skill[count]) {
-            if (strcmp(character[count], "LUFFY") != 0 && strcmp(character[count], "USOPP") != 0) {
-                //for (int i = 0; i < SUPPORT_CHARACTER; i++) {
-                    //if (strcmp(supCharName[count], supCharName[i]) != 0) {
-                        strcpy(supCharName[supIdx],character[count]);
-                        supIdx++;
-                        count = 0;
-                    // }
-                //}
-                cout << "in if - " << supIdx << endl;
-
-            } else {
-                count++;
+        for (int i = 0; i < FIXED_CHARACTER; i++) {
+            if (!isUsed[i] && supChar[supIdx][0] == skill[i] && strcmp(character[i], "LUFFY") != 0 && strcmp(character[i], "USOPP") != 0) {
+                strcpy(supCharName[supIdx], character[i]);
+                isUsed[i] = true;
+                supIdx++;
+                break;
             }
-        } else {
-            //cout << "in else - " << supIdx << endl;
-            count++;
         }
     }
 
+    //DEBUGGING
     cout << left << setw(10) << "Name" << setw(10) << "Support" << setw(10) << "Cost" << endl;
     for (int i = 0; i < SUPPORT_CHARACTER; i++) {
         cout << left << setw(10)<< supCharName[i] << setw(10) << supChar[i][0] 
@@ -163,7 +155,33 @@ void resolveDuel(char character[FIXED_CHARACTER][MAX_NAME], int hp[FIXED_CHARACT
 
     int U = skill_usopp + (conflictIndex / 20) + (repairCost / 500);
 
-    return;
+    int currLuffySkill = skill_luffy;
+
+    int count = 0;
+
+    if (currLuffySkill < U) {
+        for (int i = 0; i < SUPPORT_CHARACTER; i++) {
+            currLuffySkill += supChar[i][0];
+            strncpy(duel[count], supCharName[i], MAX_NAME - 1);
+            duel[count][MAX_NAME - 1] = '\0';
+            count++;
+            if (currLuffySkill >= U) break;
+        }
+    }
+
+    cout << "LIST OF SUPPORTERS IN DUEL" << endl;
+
+    if (count == 0) {
+        cout << "No need support!" << endl;
+    } else {
+        for (int i = 0; i < count; i++) {
+            cout << duel[i] << " " << "-" << " ";
+        }
+    }
+
+    cout << "\n";
+
+    cout << "====================================================";
 }
 
 // Task 4
@@ -220,25 +238,35 @@ void takeValuation(char character[FIXED_CHARACTER][MAX_NAME], int hp[FIXED_CHARA
         }
     }
 
-    sort();
+    quickSort(supChar, 0, SUPPORT_CHARACTER - 1);
+
 }
 
-void sort() {
-    for (int i = 0; i < SUPPORT_CHARACTER - 1; i++) {
-        int min = i;
-        for (int j = i + 1; j < SUPPORT_CHARACTER; j++) {
-            if (supChar[j][1] < supChar[min][1]){
-                min = j;
-            }
-        }
+int partition(int arr[SUPPORT_CHARACTER][SUPPORT_DETAIL], int l, int r) {
+    int pivot = arr[r][1];
 
-        if (min != i) {
-            for (int k = 0; k < SUPPORT_CHARACTER; k++) {
-                int temp = supChar[i][k];
-                supChar[i][k] = supChar[min][k];
-                supChar[min][k] = temp;
-            }
+    int i = l - 1;
+
+    for (int j = l; j <= r - 1; j++) {
+        if (arr[j][1] < pivot) {
+            i++;
+            swap(arr[i][0], arr[j][0]);
+            swap(arr[i][1], arr[j][1]);
         }
+    }
+
+    swap(arr[i + 1][0], arr[r][0]);
+    swap(arr[i + 1][1], arr[r][1]);
+
+    return (i + 1);
+}
+
+void quickSort(int arr[SUPPORT_CHARACTER][SUPPORT_DETAIL], int l, int r) {
+    if (l < r) {
+        int pi = partition(arr, l, r);
+
+        quickSort(arr, l, pi - 1);
+        quickSort(arr, pi + 1, r);
     }
 }
 
