@@ -146,42 +146,25 @@ void resolveDuel(char character[FIXED_CHARACTER][MAX_NAME], int hp[FIXED_CHARACT
         }
     }
 
-    //DEBUGGING
-    cout << left << setw(10) << "Name" << setw(10) << "Support" << setw(10) << "Cost" << endl;
-    for (int i = 0; i < SUPPORT_CHARACTER; i++) {
-        cout << left << setw(10)<< supCharName[i] << setw(10) << supChar[i][0] 
-             << setw(10) << supChar[i][1] << endl;
-    }
-
     int U = skill_usopp + (conflictIndex / 20) + (repairCost / 500);
 
     int currLuffySkill = skill_luffy;
 
     int count = 0;
 
+    char result[FIXED_CHARACTER][MAX_NAME];
+
     if (currLuffySkill < U) {
         for (int i = 0; i < SUPPORT_CHARACTER; i++) {
             currLuffySkill += supChar[i][0];
-            strncpy(duel[count], supCharName[i], MAX_NAME - 1);
-            duel[count][MAX_NAME - 1] = '\0';
+            strncpy(result[count], supCharName[i], MAX_NAME - 1);
+            result[count][MAX_NAME - 1] = '\0';
             count++;
             if (currLuffySkill >= U) break;
         }
     }
 
-    cout << "LIST OF SUPPORTERS IN DUEL" << endl;
-
-    if (count == 0) {
-        cout << "No need support!" << endl;
-    } else {
-        for (int i = 0; i < count; i++) {
-            cout << duel[i] << " " << "-" << " ";
-        }
-    }
-
-    cout << "\n";
-
-    cout << "====================================================";
+    memcpy(duel, result, sizeof(result));
 }
 
 // Task 4
@@ -190,28 +173,56 @@ void decodeCP9Message(char character[FIXED_CHARACTER][MAX_NAME], int hp[FIXED_CH
     int key = (conflictIndex + repairCost) % 26;
     int B = (key % 5) + 4;
 
-    int lenCipherText = sizeof(cipherText) / sizeof(cipherText[0]);
-    char *mess = new char[lenCipherText];
+    int lenCipherText = strlen(cipherText);
+
+    if(lenCipherText <= 2) {
+        strcpy(resultText, "");
+        return;
+    }
+
+    int lenMess = lenCipherText - 2;
+    char mess[CHAR_MAX];
+    strncpy(mess, cipherText, lenMess);
+    mess[lenMess] = '\0';
+
+    int XY = (cipherText[lenCipherText - 2] - '0') * 10 + (cipherText[lenCipherText - 1] - '0');
     int checkSum = 0;
-
-    for (int i = 0; i < lenCipherText - 2; i++) {
-        mess[i] = cipherText[i];
-        if (cipherText[i] == '#') {
-            checkSum += (int)cipherText[i+1];
-            checkSum *= 10;
-            checkSum += (int)cipherText[i+2];
-        }
-    } 
-
-    for (int i = 0; i < lenCipherText - 2; i++) {
-        checkSum += static_cast<int>(mess[i]);
+    for (int i = 0; i < lenMess; i++) {
+        checkSum += (int)(mess[i]);
     }
 
     checkSum = checkSum % 100;
 
-    if 
+    if (checkSum != XY) {
+        strcpy(resultText, "");
+        return;
+    }
 
-    delete[] mess;
+    // two pointer
+    for (int i = 0; i < lenMess; i += B) {
+        int l = i;
+        int r = (r + B - 1 < lenCipherText) ? (r + B - 1) : (lenCipherText - 1);
+
+        while (l < r) {
+            char temp = mess[l];
+            mess[l] = mess[r];
+            mess[r] = temp;
+
+            l++;
+            r++;
+        }
+    }
+
+    for (int i = 0; i < lenMess; i++) {
+        if (mess[i] > 'A' && mess[i] <= 'Z') {
+            mess[i] = (mess[i] - 'A' - key % 26 + 26) % 26 + 'A';
+        } else if (mess[i] >= '0' && mess[i] < 'A') {
+            int keyMod10 = key%10;
+            mess[i] = (mess[i] - '0' - keyMod10 + 10) % 10 + '0';
+        }
+    }
+
+    strcpy(resultText, mess);
 }
 
 // Task 5
