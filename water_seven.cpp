@@ -187,6 +187,31 @@ void resolveDuel(char character[FIXED_CHARACTER][MAX_NAME], int hp[FIXED_CHARACT
 // Task 4
 void decodeCP9Message(char character[FIXED_CHARACTER][MAX_NAME], int hp[FIXED_CHARACTER], int skill[FIXED_CHARACTER], int conflictIndex, int repairCost, char cipherText[], char resultText[]){
     //TODO: Output assign to resultText parameter
+    int key = (conflictIndex + repairCost) % 26;
+    int B = (key % 5) + 4;
+
+    int lenCipherText = sizeof(cipherText) / sizeof(cipherText[0]);
+    char *mess = new char[lenCipherText];
+    int checkSum = 0;
+
+    for (int i = 0; i < lenCipherText - 2; i++) {
+        mess[i] = cipherText[i];
+        if (cipherText[i] == '#') {
+            checkSum += (int)cipherText[i+1];
+            checkSum *= 10;
+            checkSum += (int)cipherText[i+2];
+        }
+    } 
+
+    for (int i = 0; i < lenCipherText - 2; i++) {
+        checkSum += static_cast<int>(mess[i]);
+    }
+
+    checkSum = checkSum % 100;
+
+    if 
+
+    delete[] mess;
 }
 
 // Task 5
@@ -209,7 +234,7 @@ bool isPerfect(int n) {
     while (n > 0) {
         sum += n % 10;
         n /= 10;
-    }
+    } 
 
     if (sum <= 1) return false;
 
