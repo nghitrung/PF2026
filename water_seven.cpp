@@ -110,12 +110,14 @@ int conflictSimulation(
 
     takeValuation(character, hp, skill, shipHP, repairCost);
 
+    int shipTerm = round((500.0 - shipHP) / 50.0);
+    int repairTerm = round(repairCost / 100.0);
+
     int numEvent = 0; 
-    int conflictIndex = skill_luffy - skill_usopp + (repairCost / 100) + ((500 - shipHP) / 50);
-    int id = -1; 
+    int conflictIndex = skill_luffy - skill_usopp + repairTerm + shipTerm;
 
     while (numEvent < 10 && conflictIndex < 255) {
-        id = conflictIndex % 6;
+        int id = abs(conflictIndex) % 6;
 
         conflictIndex += listEvent[id];
 
@@ -152,20 +154,15 @@ void resolveDuel(char character[FIXED_CHARACTER][MAX_NAME], int hp[FIXED_CHARACT
 
     int count = 0;
 
+    for (int i = 0; i < FIXED_CHARACTER; i++) duel[i][0] = '\0';
+
     if (currLuffySkill < U) {
         for (int i = 0; i < SUPPORT_CHARACTER; i++) {
             currLuffySkill += supChar[i][0];
-            strncpy(duel[i], supCharName[i], MAX_NAME - 1);
+            strncpy(duel[count], supCharName[i], MAX_NAME - 1);
             duel[count][MAX_NAME - 1] = '\0';
             count++;
             if (currLuffySkill >= U) break;
-        }
-    }
-
-    // DEBUGGING
-    if (count != 0) {
-        for (int i = 0; i < count; i++) {
-            cout << duel[i] << "-"; 
         }
     }
 
@@ -202,7 +199,12 @@ void decodeCP9Message(char character[FIXED_CHARACTER][MAX_NAME], int hp[FIXED_CH
     for (int i = 0; i < strlen(message); i++) {
         calculateSum += (int)message[i];
     }
-    calculateSum = calculateSum % 100;
+    calculateSum %= 100;
+
+    if (calculateSum != readChecksum) {
+        resultText[0] = '\0';
+        return;
+    }
 
     int lenMess = strlen(message);
     for (int i = 0; i < lenMess; i += B) {
@@ -233,7 +235,7 @@ void decodeCP9Message(char character[FIXED_CHARACTER][MAX_NAME], int hp[FIXED_CH
     if (calculateSum == readChecksum && hasCP9) {
         strcat(resultText, "_TRUE");
     } else {
-        strcat(resultText, "_FALSE");
+        strcat(resultText, "");
     }
 
     return;
@@ -241,14 +243,59 @@ void decodeCP9Message(char character[FIXED_CHARACTER][MAX_NAME], int hp[FIXED_CH
 
 // Task 5
 int analyzeDangerLimit(int grid[MAX_GRID][MAX_GRID], int rows, int cols){
-    // TODO
-    return 0;
+    int maxRowSum = 0;
+    int maxCell = -1e9;
+
+    for (int i = 0; i < rows; i++) {
+        int currentRowSum = 0;
+        for (int j = 0; j < cols; j++) {
+            if (grid[i][j] > maxCell) {
+                maxCell = grid[i][j];
+            }
+            if (grid[i][j] >= 0) {
+                currentRowSum += grid[i][j];
+            }
+        }
+        if (currentRowSum > maxRowSum) {
+            maxRowSum = currentRowSum;
+        }
+    }
+
+    return maxRowSum + maxCell;
 }
 
 
 bool evaluateRoute(int grid[MAX_GRID][MAX_GRID], int rows, int cols, int dangerLimit){
-    // TODO
-    return false;
+    if (grid[0][0] == -1 || grid[rows - 1][cols - 1] == -1) return false;
+
+    int dp[MAX_GRID][MAX_GRID];
+    for (int i = 0; i < rows; i++) {
+        for (int j = 0; j < cols; j++) dp[i][j] = 1e9; 
+    }
+
+    dp[0][0] = grid[0][0];
+
+    for (int i = 0; i < rows; i++) {
+        for (int j = 0; j < cols; j++) {
+            if (grid[i][j] == -1 || dp[i][j] == 1e9) continue;
+
+            if (j + 1 < cols && grid[i][j + 1] != -1) {
+                if (dp[i][j] + grid[i][j + 1] < dp[i][j + 1]) {
+                    dp[i][j + 1] = dp[i][j] + grid[i][j + 1];
+                }
+            }
+
+            if (i + 1 < rows && grid[i + 1][j] != -1) {
+                if (dp[i][j] + grid[i + 1][j] < dp[i + 1][j]) {
+                    dp[i + 1][j] = dp[i][j] + grid[i + 1][j];
+                }
+            }
+        }
+    }
+
+    int minTotalDanger = dp[rows - 1][cols - 1];
+
+    return (minTotalDanger != 1e9 && minTotalDanger <= dangerLimit);
 }
 
 // HELPER FUNCTION
@@ -288,36 +335,6 @@ void takeValuation(char character[FIXED_CHARACTER][MAX_NAME], int hp[FIXED_CHARA
         }
     }
 
-    quickSort(supChar, 0, SUPPORT_CHARACTER - 1);
-
-}
-
-int partition(int arr[SUPPORT_CHARACTER][SUPPORT_DETAIL], int l, int r) {
-    int pivot = arr[r][1];
-
-    int i = l - 1;
-
-    for (int j = l; j <= r - 1; j++) {
-        if (arr[j][1] < pivot) {
-            i++;
-            swap(arr[i][0], arr[j][0]);
-            swap(arr[i][1], arr[j][1]);
-        }
-    }
-
-    swap(arr[i + 1][0], arr[r][0]);
-    swap(arr[i + 1][1], arr[r][1]);
-
-    return (i + 1);
-}
-
-void quickSort(int arr[SUPPORT_CHARACTER][SUPPORT_DETAIL], int l, int r) {
-    if (l < r) {
-        int pi = partition(arr, l, r);
-
-        quickSort(arr, l, pi - 1);
-        quickSort(arr, pi + 1, r);
-    }
 }
 
 
