@@ -25,5 +25,6 @@ void testReadInput();
 void testDamageEvaluation();
 void testConflictSimulation();
 void testResolveDuel();
+void testdecodeCP9Message();
 
 #endif //_MAIN_H_

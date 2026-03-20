@@ -28,29 +28,33 @@ int main(int argc, const char * argv[]) {
 
     testResolveDuel();
 
+    testdecodeCP9Message();
+
     return 0;
+}
+
+bool readFile() {
+    //string filename = "opw_tc_01_input";
+    string filename = "opw_tc_02_input";
+    
+    bool readable = readInput(filename, character, hp, skill, shipHP, repairCost);
+
+    if (!readable) return false;
+
+    return true;
 }
 
 void testReadInput() {
     cout << "====================================================" << endl;
     cout << "   READ INPUT (TASK 0)          " << endl;
-    cout << "====================================================" << endl;
 
-    string filename = "opw_tc_01_input";
-    //string filename = "opw_tc_02_input";
-    
-    cout << "--- READING FILE: " << filename << " SUCCESSFULL ---" << endl;
-
-    bool success = readInput(filename, character, hp, skill, shipHP, repairCost);
-
-    if (success) {
+    if (readFile()) {
         cout << left << setw(15) << "Name" << setw(10) << "HP" << setw(10) << "Skill" << endl;
 
         for (int i = 0; i < FIXED_CHARACTER; i++) {
             cout << left << setw(15) << character[i] << setw(10) << hp[i] << setw(10) << skill[i] << endl;
         }
 
-        cout << "====================================================" << endl;
         cout << "INFORMATION OF MERRY: " << endl;
         cout << "- HP Ship: " << shipHP << endl;
         cout << "- Repair Ship Cost: " << repairCost << endl;
@@ -62,7 +66,6 @@ void testReadInput() {
 void testDamageEvaluation() {
     cout << "====================================================" << endl;
     cout << "   DAMAGE EVALUATION (TASK 1)          " << endl;
-    cout << "====================================================" << endl;
     cout << left << setw(10) << "STT" << setw(12) << "shipHP" << setw(12) << "Repair" << setw(12) << "Output" << "Expected" << endl;
     cout << string(60, '-') << endl;
 
@@ -96,37 +99,47 @@ void testDamageEvaluation() {
              << setw(12) << tests[i].expected << endl;
 
     }
-    cout << "====================================================" << endl << endl;
 }
 
 void testConflictSimulation() {
     cout << "====================================================" << endl;
     cout << "   CONFLICT SIMULATION (TASK 2)        " << endl;
-    cout << "====================================================" << endl;
+    
 
-    testReadInput();
+    if (!readFile) cout << "ERROR!" << endl;
 
-    int result = -1;
-    for (int i = 0; i < FIXED_CHARACTER; i++) {
-        result = conflictSimulation(character, hp, skill, shipHP, repairCost);
-    }
+    cout << "ConflictIndex: " << conflictSimulation(character, hp, skill, shipHP, repairCost) << endl;
 
-    cout << "ConflictIndex: " << result << endl;
 }
 
-void testResolveDuel() {
-    testReadInput();
-    
+void testResolveDuel() {    
     cout << "====================================================" << endl;
     cout << "       RESOLVE DUEL (TASK 3)          " << endl;
-    cout << "====================================================" << endl;
 
-    char duel[FIXED_CHARACTER][MAX_NAME];
+    if(!readFile()) cout << "ERROR!" << endl;
+
+    char duelResult[FIXED_CHARACTER][MAX_NAME];
+
     for (int i = 0; i < FIXED_CHARACTER; i++) {
-        duel[i][0] = '\0';
+        duelResult[i][0] = '\0';
     }
+    
+    resolveDuel(character, hp, skill, 120, 1500, duelResult);
+    
+    cout << endl;
+}
 
-    resolveDuel(character, hp, skill, 120, repairCost, duel);
-
+void testdecodeCP9Message() {
     cout << "====================================================" << endl;
+    cout << "       DECODE CP9 MESSAGE (TASK 4)          " << endl;
+
+    if (!readFile()) cout << "ERROR!" << endl;
+
+    char cipherText[] = "AQ 7XK#96";
+    char resultText[CHAR_MAX] = "";
+
+    decodeCP9Message(character, hp, skill, 120, 1500, cipherText, resultText);
+
+    cout << "Input: " << cipherText << endl;
+    cout << "Ouput: " << resultText << endl;
 }

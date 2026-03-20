@@ -152,19 +152,24 @@ void resolveDuel(char character[FIXED_CHARACTER][MAX_NAME], int hp[FIXED_CHARACT
 
     int count = 0;
 
-    char result[FIXED_CHARACTER][MAX_NAME];
-
     if (currLuffySkill < U) {
         for (int i = 0; i < SUPPORT_CHARACTER; i++) {
             currLuffySkill += supChar[i][0];
-            strncpy(result[count], supCharName[i], MAX_NAME - 1);
-            result[count][MAX_NAME - 1] = '\0';
+            strncpy(duel[i], supCharName[i], MAX_NAME - 1);
+            duel[count][MAX_NAME - 1] = '\0';
             count++;
             if (currLuffySkill >= U) break;
         }
     }
 
-    memcpy(duel, result, sizeof(result));
+    // DEBUGGING
+    if (count != 0) {
+        for (int i = 0; i < count; i++) {
+            cout << duel[i] << "-"; 
+        }
+    }
+
+    return;
 }
 
 // Task 4
@@ -173,56 +178,65 @@ void decodeCP9Message(char character[FIXED_CHARACTER][MAX_NAME], int hp[FIXED_CH
     int key = (conflictIndex + repairCost) % 26;
     int B = (key % 5) + 4;
 
+    char message[CHAR_MAX] = "";
+    int readChecksum = -1;
+    char* sharpPos = strchr(cipherText, '#');
+
+    if (sharpPos != NULL) {
+        int lenMess = sharpPos - cipherText;
+        strncpy(message, cipherText, lenMess);
+        message[lenMess] = '\0';
+        readChecksum = atoi(sharpPos + 1);
+    } else {
+        strcpy(message, cipherText);
+    }
+
     int lenCipherText = strlen(cipherText);
 
-    if(lenCipherText <= 2) {
+    if(lenCipherText < 2) {
         strcpy(resultText, "");
         return;
     }
 
-    int lenMess = lenCipherText - 2;
-    char mess[CHAR_MAX];
-    strncpy(mess, cipherText, lenMess);
-    mess[lenMess] = '\0';
-
-    int XY = (cipherText[lenCipherText - 2] - '0') * 10 + (cipherText[lenCipherText - 1] - '0');
-    int checkSum = 0;
-    for (int i = 0; i < lenMess; i++) {
-        checkSum += (int)(mess[i]);
+    int calculateSum = 0;
+    for (int i = 0; i < strlen(message); i++) {
+        calculateSum += (int)message[i];
     }
+    calculateSum = calculateSum % 100;
 
-    checkSum = checkSum % 100;
-
-    if (checkSum != XY) {
-        strcpy(resultText, "");
-        return;
-    }
-
-    // two pointer
+    int lenMess = strlen(message);
     for (int i = 0; i < lenMess; i += B) {
         int l = i;
-        int r = (r + B - 1 < lenCipherText) ? (r + B - 1) : (lenCipherText - 1);
+        int r = (i + B - 1 < lenMess) ? (i + B - 1) : (lenMess - 1);
 
         while (l < r) {
-            char temp = mess[l];
-            mess[l] = mess[r];
-            mess[r] = temp;
+            char temp = message[l];
+            message[l] = message[r];
+            message[r] = temp;
 
             l++;
-            r++;
+            r--;
         }
     }
 
     for (int i = 0; i < lenMess; i++) {
-        if (mess[i] > 'A' && mess[i] <= 'Z') {
-            mess[i] = (mess[i] - 'A' - key % 26 + 26) % 26 + 'A';
-        } else if (mess[i] >= '0' && mess[i] < 'A') {
-            int keyMod10 = key%10;
-            mess[i] = (mess[i] - '0' - keyMod10 + 10) % 10 + '0';
+        if (message[i] >= 'A' && message[i] <= 'Z') {
+            message[i] = (message[i] - 'A' - (key % 26) + 26) % 26 + 'A';
+        } else if (message[i] >= '0' && message[i] <= '9') {
+            message[i] = (message[i] - '0' - (key % 10) + 10) % 10 + '0';
         }
     }
 
-    strcpy(resultText, mess);
+    strcpy(resultText, message);
+    bool hasCP9 = (strstr(message, "CP9") != NULL);
+
+    if (calculateSum == readChecksum && hasCP9) {
+        strcat(resultText, "_TRUE");
+    } else {
+        strcat(resultText, "_FALSE");
+    }
+
+    return;
 }
 
 // Task 5
