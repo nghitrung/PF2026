@@ -1,0 +1,733 @@
+ĐẠI HỌC QUỐC GIA THÀNH PHỐ HỒ CHÍ MINH
+TRƯỜNG ĐẠI HỌC BÁCH KHOA
+KHOA KHOA HỌC V À KỸ THUẬT MÁY TÍNH
+Kỹ thuật Lập trình - CO1027
+Bài tập lớn 2
+VUA HẢI TẶC - ONE PIECE
+Arc Water 7 - Enies Lobby (phần 2)
+Phiên bản 1.0
+TP. HỒ CHÍ MINH, THÁNG 05/2026
+TRƯỜNG ĐẠI HỌC BÁCH KHOA - ĐHQG-HCM
+KHOA KHOA HỌC VÀ KỸ THUẬT MÁY TÍNH
+ĐẶC TẢ BÀI TẬP LỚN
+Phiên bản 1.0
+1 Chuẩn đầu ra
+Sau khi hoàn thành bài tập lớn này, sinh viên ôn lại và sử dụng thành thục:
+•Các thao tác đọc/ghi tập tin.
+•Con trỏ và cấp phát động.
+•Lập trình hướng đối tượng.
+•Danh sách liên kết đơn.
+2 Dẫn nhập
+Trong phần trước, chúng ta đã theo chân băng Mũ Rơm trong hành trình tại Water 7, nơi
+những mâu thuẫn nội bộ dần được hé lộ và những quyết định quan trọng được đưa ra. Đỉnh
+điểm của sự kiện là khi Nico Robin bị Chính phủ Thế giới bắt giữ và đưa đến Enies Lobby –
+một trong ba cơ quan quyền lực lớn nhất của Chính phủ.
+Tại Enies Lobby, băng Mũ Rơm buộc phải đối đầu trực diện với lực lượng đặc vụ tinh
+nhuệ CP9 để giải cứu đồng đội của mình. Trận chiến không chỉ đơn thuần là đối đầu giữa các
+cá nhân, mà còn là sự giằng co giữa thời gian, môi trường chiến trường và các yếu tố chiến
+thuật khác nhau. Các công trình như Cổng chính, Tòa án, Tháp công lý hay Cầu do dự đều
+đóng vai trò quan trọng, ảnh hưởng trực tiếp đến tiến trình của cuộc giải cứu.
+Trong bài tập lớn này, sinh viên được yêu cầu mô phỏng lại trận chiến tại Enies Lobby
+thông qua việc xây dựng các lớp (class) và hiện thực các cơ chế tương tác giữa nhân vật, công
+trình và trạng thái trận chiến. Các nhân vật sẽ hành động theo lượt, thực hiện tấn công hoặc
+sử dụng kỹ năng đặc biệt, trong khi các công trình liên tục tác động đến diễn biến chung của
+trận đánh.
+3 Các lớp trong chương trình
+Bài tập lớn này sử dụng Lập trình Hướng đối tượng để mô tả trận chiến giải cứu Robin của
+băng Mũ Rơm tại đảo Enies Lobby. Các đối tượng trong Bài tập lớn được biểu diễn thông qua
+Bài tập lớn môn Kỹ thuật lập trình - HK 2 năm học 2025 - 2026 Trang 1/23
+TRƯỜNG ĐẠI HỌC BÁCH KHOA - ĐHQG-HCM
+KHOA KHOA HỌC VÀ KỸ THUẬT MÁY TÍNH
+class và được mô tả như bên dưới.
+Lưu ý:
+•Sinh viên cần đọc kĩ đề để xác định các lớp kế thừa (derivative class), đề sẽ không mô tả
+tường minh.
+•Sinh viên cần có thể tự xuất thêm các thuộc tính, các phương thức hoặc các class khác
+để hỗ trợ cho việc hiện thực các class trong Bài tập lớn này.
+•Trong khuôn khổ Bài tập lớn này, khi các giá trị tính toán cần làm tròn về số nguyên,
+sinh viên cần làm tròn lên.
+•Trong khuôn khổ Bài tập lớn này, các giá trịhp,energy,morale,alarmLevel,rescueProgress,
+escapeProgressvàhpcủa công trình luôn được làm tròn về khoảng giá trị hợp lệ sau
+mỗi lần cập nhật. Cụ thể,hpcủa nhân vật nằm trong đoạn từ 0 đếnmaxHp,hpcủa công
+trình nằm trong đoạn từ 0 đếnmaxHP,energy,morale,alarmLevel,rescueProgressvà
+escapeProgressnằm trong đoạn từ 0 đến 100. RiêngbusterCallTimerkhông được nhỏ
+hơn 0.
+3.1 Nhân vật
+Mỗi nhân vật tham gia trận chiến tại Enies Lobby được biểu diễn thông qua một lớp cơ sở
+trừu tượngCharacter. Đây là lớp cha của tất cả các nhân vật trong chương trình, bao gồm
+các thành viên băng Mũ Rơm và các đặc vụ CP9.
+Yêu cầu: Hiện thực abstract classCharactervới các mô tả sau:
+1. Các thuộc tínhprotected:
+•name: kiểustring, tên của nhân vật.
+•hp: kiểuint, lượng máu hiện tại của nhân vật.
+•maxHp: kiểuint, lượng máu tối đa của nhân vật.
+•atk: kiểuint, chỉ số tấn công cơ bản.
+•def: kiểuint, chỉ số phòng thủ cơ bản.
+•speed: kiểuint, tốc độ hành động của nhân vật.
+•energy: kiểuint, năng lượng hiện tại dùng để thi triển kỹ năng.
+•alive: kiểubool, trạng thái còn khả năng chiến đấu của nhân vật.
+2. Constructorpublicvới các tham sốname,hp,atk,def,speed,energycó ý nghĩa giống
+với các thuộc tính cùng tên. Constructor gán giá trị của các tham số cho thuộc tính tương
+Bài tập lớn môn Kỹ thuật lập trình - HK 2 năm học 2025 - 2026 Trang 2/23
+TRƯỜNG ĐẠI HỌC BÁCH KHOA - ĐHQG-HCM
+KHOA KHOA HỌC VÀ KỸ THUẬT MÁY TÍNH
+ứng. Giá trịmaxHpđược gán bằng với giá trịhp. Nếuhplớn hơn 0 thìaliveđược gán là
+true, ngược lạialiveđược gán làfalse.
+1Cha ra ct er ( string name , int hp , int atk , int def , int speed , int energy ) ;
+3. Phương thức hủy ảo với quyền truy cậppublic.
+1virtual ~ Ch ar ac te r () ;
+4. Pure virtual methodattackdùng để thực hiện đòn tấn công thường lên một nhân vật
+khác. Phương thức nhận vào con trỏtargetlà mục tiêu bị tấn công và tham chiếu
+contextlà trạng thái hiện tại của trận đánh. Giá trị trả về là lượng sát thương thực tế
+được tạo ra.
+1virtual int attack ( C ha ra ct er * target , B a t t l e C o n t e x t & context ) = 0;
+5. Pure virtual methodspecialSkilldùng để thi triển kỹ năng đặc biệt của nhân vật. Mỗi
+lớp con sẽ có cách hiện thực kỹ năng khác nhau. Phương thức nhận vào con trỏtarget
+là mục tiêu chịu tác động và tham chiếucontextlà trạng thái hiện tại của trận đánh.
+Giá trị trả về là lượng sát thương được tạo ra.
+1virtual int s p e c i a l S k i l l ( C ha rac te r * target , B a t t l e C o n t e x t & context ) = 0;
+6. Virtual methodattackvới tham số làBuilding*dùng để thực hiện đòn tấn công lên
+công trình.
+Phương thức này có hiện thực mặc định không gây sát thương và trả về 0. Các lớp con
+mô tả nhân vật có khả năng tác động lên công trình bắt buộc override phương thức này.
+1virtual int attack ( Building * target , B a t t l e C o n t e x t & context ) ;
+7. Virtual methodspecialSkillvới tham số làBuilding*dùng để thực hiện kỹ năng đặc
+biệt lên công trình.
+Phương thức này có hiện thực mặc định không gây sát thương và trả về 0. Các lớp con
+mô tả nhân vật có khả năng tác động lên công trình bắt buộc override phương thức này.
+1virtual int s p e c i a l S k i l l ( Building * target , B a t t l e C o n t e x t & context ) ;
+8. Virtual methodendTurndùng để xử lý các hiệu ứng cuối lượt của nhân vật. Các hiệu
+ứng này có thể bao gồm hồi năng lượng, cập nhật trạng thái hoặc thay đổi một số thông
+tin trongBattleContext.
+1virtual void endTurn ( B a t t l e C o n t e x t & context ) ;
+9. MethodreceiveDamagedùng để cập nhật máu của nhân vật khi nhận sát thương. Sát
+thương thực tế nhận vào bằng hiệu củadamagetruyền vào và chỉ số phòng thủ của nhân
+vật, nếu hiệu này nhỏ hơn 0 thì nhân vật sẽ không nhận sát thương. Nếu sau khi nhận
+sát thương,hpnhỏ hơn hoặc bằng 0 thìhpđược gán bằng 0 vàaliveđược gán làfalse.
+Bài tập lớn môn Kỹ thuật lập trình - HK 2 năm học 2025 - 2026 Trang 3/23
+TRƯỜNG ĐẠI HỌC BÁCH KHOA - ĐHQG-HCM
+KHOA KHOA HỌC VÀ KỸ THUẬT MÁY TÍNH
+1void r e c e i v e D a m a g e ( int damage ) ;
+10. MethodisAlivetrả về trạng thái còn khả năng chiến đấu của nhân vật.
+1bool isAlive () const ;
+11. MethodgetNametrả về tên của nhân vật.
+1string getName () const ;
+12. MethodgetHPtrả về lượng máu hiện tại của nhân vật.
+1int getHP () const ;
+13. MethodgetEnergytrả về lượng năng lượng hiện tại của nhân vật.
+1int g et En erg y () const ;
+14. Virtual methodisStrawHattrả về giá trịtruenếu nhân vật thuộc băng Mũ Rơm, ngược
+lại trả vềfalse. LớpStrawHatcần override phương thức này.
+1virtual bool i s S t r a w H a t () const ;
+15. Virtual methodisCP9trả về giá trịtruenếu nhân vật thuộc lực lượng CP9, ngược lại
+trả vềfalse. LớpCP9Agentcần override phương thức này.
+1virtual bool isCP9 () const ;
+16. Pure virtual methodstrtrả về chuỗi biểu diễn thông tin của nhân vật.
+1virtual string str () const = 0;
+3.2 Băng Mũ Rơm
+Băng Mũ Rơm là lực lượng chính trong trận chiến tại Enies Lobby với mục tiêu giải cứu Robin.
+Các thành viên trong băng đều kế thừa từ lớpStrawHat, là lớp con củaCharacter.
+Yêu cầu: Hiện thực classStrawHatvới các mô tả sau:
+1. Các thuộc tínhprotected:
+•bounty: kiểulong long, tiền truy nã của nhân vật.
+2. Constructor (public) nhận các tham số giống lớpCharacter, đồng thời nhận thêmbounty
+để khởi tạo các thuộc tính tương ứng.
+1StrawHat ( string name , int hp , int atk , int def ,
+2int speed , int energy , long long bounty ) ;
+3. Phương thứcisStrawHat:
+Bài tập lớn môn Kỹ thuật lập trình - HK 2 năm học 2025 - 2026 Trang 4/23
+TRƯỜNG ĐẠI HỌC BÁCH KHOA - ĐHQG-HCM
+KHOA KHOA HỌC VÀ KỸ THUẬT MÁY TÍNH
+1virtual bool i s S t r a w H a t () const ;
+Trả về giá trịtruenếu nhân vật thuộc băng Mũ Rơm, ngược lại trả vềfalse. Phương
+thức này được sử dụng để xác định phe của nhân vật trong quá trình xử lý trận đánh.
+4. Phương thứcstr:
+1virtual string str () const ;
+Trả về chuỗi biểu diễn thông tin của nhân vật thuộc băng Mũ Rơm. Chuỗi trả về có định
+dạng như sau:
+1StrawHat [ name = < name > , hp = < hp > , atk = < atk > , def = < def > , speed = < speed > ,
+energy = < energy > , bounty = < bounty >]
+Các giá trị được in liền nhau, phân tách bằng dấu phẩy và không có khoảng trắng dư
+thừa ngoài định dạng đã cho.
+Ví dụ:
+1StrawHat [ name = Luffy , hp =120 , atk =35 , def =20 , speed =25 , energy =50 , bounty
+= 1 5 0 0 0 0 0 0 0 ]
+5. Các phương thức kế thừa từCharactersẽ được override ở các lớp con cụ thể.
+6. Khi một thành viên của băng hạ gục một đặc vụ CP9, nếu mô tả của nhân vật không
+nói gì vềmoralethì mặc định giá trịmoraletrongBattleContextsẽ tăng thêm 5.
+3.2.1 Monkey D. Luffy
+Luffy là thuyền trưởng của băng Mũ Rơm, có khả năng chiến đấu mạnh mẽ và càng trở nên
+nguy hiểm khi bị dồn vào tình huống bất lợi.
+Yêu cầu: Hiện thực classLuffykế thừa từStrawHat.
+•Phương thứcattack:
+Sát thương gây ra phụ thuộc vào phần trăm máu hiện tại của Luffy. Nếu máu hiện tại
+lớn hơn 50% máu tối đa, sát thương bằng đúng chỉ số tấn công. Nếu máu lớn hơn 30%
+và không vượt quá 50%, sát thương tăng thêm 15%. Nếu máu nhỏ hơn hoặc bằng 30%,
+sát thương tăng thêm 30%.
+Nếu đòn tấn công hạ gục mục tiêu,moraletrongBattleContexttăng thêm 5.
+•Phương thứcspecialSkill:
+Luffy sử dụng Gear Second với chi phí 20 năng lượng. Kỹ năng này gây sát thương bằng
+200% chỉ số tấn công, đồng thời tăng tốc độ và sát thương của Luffy thêm 15. Việc sử
+dụng kỹ năng làm tăngalarmLevelthêm 10 và làm giảm máu của Luffy một lượng bằng
+8% máu tối đa.
+Bài tập lớn môn Kỹ thuật lập trình - HK 2 năm học 2025 - 2026 Trang 5/23
+TRƯỜNG ĐẠI HỌC BÁCH KHOA - ĐHQG-HCM
+KHOA KHOA HỌC VÀ KỸ THUẬT MÁY TÍNH
+Kỹ năng chỉ được sử dụng khi Luffy còn ít nhất 20 năng lượng và máu không nhỏ hơn
+15% máu tối đa.
+•Phương thứcendTurn:
+Nếu máu hiện tại nhỏ hơn hoặc bằng 30% máu tối đa,moraletăng thêm 3. Nếu Luffy
+vừa hạ gục một đối thủ trong lượt, Luffy hồi lại 5 năng lượng.
+3.2.2 Roronoa Zoro
+Zoro là kiếm sĩ của băng Mũ Rơm, có khả năng gây sát thương lớn và dứt điểm mục tiêu hiệu
+quả.
+Yêu cầu: Hiện thực classZorokế thừa từStrawHat.
+•Phương thứcattack:
+Sát thương của Zoro bằng chỉ số tấn công cộng thêm một lượng bằng 20% chỉ số phòng
+thủ của bản thân. Nếu mục tiêu có lượng máu nhỏ hơn 40% máu tối đa, sát thương tăng
+thêm 15%.
+•Phương thứcspecialSkill:
+Zoro sử dụng kỹ năng với chi phí 15 năng lượng, gây sát thương bằng 220% chỉ số tấn
+công. Nếu mục tiêu có lượng máu nhỏ hơn 50% máu tối đa, sát thương của kỹ năng được
+tăng thêm 50%. Nếu kỹ năng này hạ gục mục tiêu, Zoro hồi lại 8 năng lượng vàmorale
+tăng thêm 4.
+•Phương thứcendTurn:
+Nếu Zoro hạ gục được một mục tiêu,moraletăng lên 6 và chỉ số tấn công của Zoro tăng
+thêm 5%.
+3.2.3 Vinsmoke Sanji
+Sanji là một đầu bếp mang phong cách chiến đấu sử dụng cước pháp, có khả năng gây sát
+thương liên tục và làm suy yếu đối thủ.
+Yêu cầu: Hiện thực classSanjikế thừa từStrawHat.
+•Phương thứcattack:
+Sát thương bằng chỉ số tấn công cộng thêm một lượng bằng 50% tốc độ hiện tại. Nếu
+mục tiêu có chỉ số phòng thủ thấp hơn của Sanji, sát thương tăng thêm 10%, quy tắc này
+không áp dụng đối với công trình.
+Bài tập lớn môn Kỹ thuật lập trình - HK 2 năm học 2025 - 2026 Trang 6/23
+TRƯỜNG ĐẠI HỌC BÁCH KHOA - ĐHQG-HCM
+KHOA KHOA HỌC VÀ KỸ THUẬT MÁY TÍNH
+•Phương thứcspecialSkill:
+Sanji sử dụng kỹ năng với chi phí 18 năng lượng, gây sát thương bằng 210% chỉ số tấn
+công. Sau khi trúng đòn, phòng thủ của mục tiêu giảm 8 đơn vị (bỏ qua nếu là công
+trình). Nếu mục tiêu là Jabra, phòng thủ giảm 12 đơn vị thay vì 8.
+•Phương thứcendTurn:
+Nếu đối thủ bị hạ,moraletăng thêm 8 và chỉ số tấn công của Sanji tăng thêm 10%.
+3.2.4 Nami
+Nami là hoa tiêu của băng, có khả năng kiểm soát chiến trường và gây hiệu ứng bất lợi.
+Yêu cầu: Hiện thực classNamikế thừa từStrawHat.
+•Phương thứcattack:
+Sát thương bằng chỉ số tấn công, đồng thời bỏ qua 30% phòng thủ của mục tiêu. Nếu là
+công trình, sát thương chỉ bằng 50% chỉ số tấn công.
+•Phương thứcspecialSkill:
+Nami sử dụng kỹ năng với chi phí 20 năng lượng, gây sát thương bằng chỉ số tấn công
+cộng thêm 40. Đồng thời làm giảm tốc độ của mục tiêu 10 đơn vị. Nếu mục tiêu là công
+trình, sát thương tăng thêm 50%. Sau khi sử dụng,busterCallTimertăng thêm 1 và
+alarmLevelgiảm 5.
+•Phương thứcendTurn:
+Nếu đối thủ bị hạ, Nami hồi lại 6 năng lượng.
+3.2.5 Tony Tony Chopper
+Chopper là bác sĩ của băng, vừa có khả năng hồi phục cho đồng đội và vừa có thể chiến đấu.
+Yêu cầu: Hiện thực classChopperkế thừa từStrawHat.
+•Phương thứcattack:
+Sát thương bằng chỉ số tấn công của Chopper.
+•Phương thứcspecialSkill:
+Chopper sử dụng kỹ năng hồi máu với chi phí 15 năng lượng, kỹ năng này chỉ có thể được
+sử dụng lên thành viên của băng Mũ Rơm đang có máu thấp nhất. Kỹ năng này hồi cho
+mục tiêu một lượng máu bằng 35 cộng thêm 50% chỉ số tấn công của Chopper.
+Nếu mục tiêu là Luffy,moraletrongBattleContexttăng thêm 5.
+Bài tập lớn môn Kỹ thuật lập trình - HK 2 năm học 2025 - 2026 Trang 7/23
+TRƯỜNG ĐẠI HỌC BÁCH KHOA - ĐHQG-HCM
+KHOA KHOA HỌC VÀ KỸ THUẬT MÁY TÍNH
+•Phương thứcendTurn:
+Chopper không có hiệu ứng đặc biệt ở cuối lượt.
+3.2.6 Usopp (Sogeking)
+Do bất hoà trước đó với Luffy, Ussop đã cải trang thành Sogeking trong trận chiến, Sogeking
+là xạ thủ với khả năng gây hiệu ứng và hỗ trợ chiến thuật.
+Yêu cầu: Hiện thực classUsoppkế thừa từStrawHat.
+•Phương thứcattack:
+Sát thương bằng chỉ số tấn công. Nếu mục tiêu có tốc độ nhỏ hơn 50, sát thương tăng
+thêm 20%. Nếu mục tiêu là công trình, sát thương chỉ bằng 50% chỉ số tấn công.
+•Phương thứcspecialSkill:
+Sogeking sử dụng kỹ năng với chi phí 16 năng lượng, gây sát thương bằng 80% chỉ số tấn
+công. Đồng thời làm giảm tốc độ mục tiêu 12 đơn vị (bỏ qua nếu là công trình). Sau khi
+sử dụng,escapeProgresstăng thêm 8.
+•Phương thứcendTurn:
+Sau khi Sogeking tấn công,moraletoàn đội tăng thêm 10 đơn vị.
+3.2.7 Franky (Cutty Flam)
+Franky là thủ lĩnh một nhóm côn đồ trên đảo Water Seven, hắn đồng hành cùng đội của Luffy
+trong quá trình giải cứu Robin. Franky có khả năng gây sát thương lớn và tác động diện rộng.
+Yêu cầu: Hiện thực classFrankykế thừa từStrawHat.
+•Phương thứcattack:
+Sát thương bằng chỉ số tấn công cộng thêm một lượng bằng 30% phòng thủ. Nếu mục
+tiêu là CP9, sát thương tăng thêm 10%.
+•Phương thứcspecialSkill:
+Franky có hai kỹ năng:
+Kỹ năng Strong Right tiêu tốn 20 năng lượng, gây sát thương bằng 180% chỉ số tấn công
+và làm giảm tốc độ mục tiêu 8 đơn vị (bỏ qua nếu là công trình). Nếu mục tiêu là Lucci,
+sát thương tăng thêm 20%.
+Kỹ năng Coup de Vent tiêu tốn 30 năng lượng, gây sát thương bằng 120% chỉ số tấn công
+mục tiêu. Nếu mục tiêu là mộtBuilding,Buildingđó sẽ ngay lập tức bị phá huỷ.
+Bài tập lớn môn Kỹ thuật lập trình - HK 2 năm học 2025 - 2026 Trang 8/23
+TRƯỜNG ĐẠI HỌC BÁCH KHOA - ĐHQG-HCM
+KHOA KHOA HỌC VÀ KỸ THUẬT MÁY TÍNH
+•Phương thứcendTurn:
+Nếu máu hiện tại lớn hơn 70% máu tối đa, phòng thủ của Franky tăng lên 5 đơn vị. Nếu
+máu hiện tại nhỏ hơn 30% máu tối đa, tấn công của Franky tăng thêm 10%.
+3.3 Cipher Pol Number 9 (CP9)
+CP9 là lực lượng đặc vụ tinh nhuệ của Chính phủ Thế giới, có nhiệm vụ ngăn chặn băng Mũ
+Rơm và bảo vệ Enies Lobby. Các thành viên CP9 kế thừa từ lớpCP9Agent, là lớp con của
+Character.
+Yêu cầu: Hiện thực classCP9Agentvới các mô tả sau:
+1. Các thuộc tínhprotected:
+•doriki: kiểuint, đại diện cho sức mạnh tổng thể của đặc vụ.
+2. Constructor nhận các tham số giống lớpCharacter, đồng thời nhận thêmdorikiđể khởi
+tạo.
+1CP9Agent ( string name , int hp , int atk , int def ,
+2int speed , int energy , int doriki ) ;
+3. Phương thứcisCP9:
+1virtual bool isCP9 () const ;
+Trả về giá trịtruenếu nhân vật thuộc lực lượng CP9, ngược lại trả vềfalse. Phương
+thức này được sử dụng để xác định phe của nhân vật trong quá trình xử lý trận đánh.
+4. Phương thứcstr:
+1virtual string str () const ;
+Trả về chuỗi biểu diễn thông tin của đặc vụ CP9. Chuỗi trả về có định dạng như sau:
+1CP9 [ name = < name > , hp = < hp > , atk = < atk > , def = < def > , speed = < speed > , energy = <
+energy > , doriki = < doriki >]
+Các giá trị được in liền nhau, phân tách bằng dấu phẩy và không có khoảng trắng dư
+thừa ngoài định dạng đã cho. Ví dụ:
+1CP9 [ name = Lucci , hp =150 , atk =40 , def =25 , speed =30 , energy =60 , doriki
+=4000]
+5. Khi một đặc vụ CP9 hạ gục một thành viên băng Mũ Rơm, nếu mô tả của đặc vụ không
+nói gì vềmoralethì mặc định giá trịmoraletrongBattleContextsẽ giảm đi 5.
+Bài tập lớn môn Kỹ thuật lập trình - HK 2 năm học 2025 - 2026 Trang 9/23
+TRƯỜNG ĐẠI HỌC BÁCH KHOA - ĐHQG-HCM
+KHOA KHOA HỌC VÀ KỸ THUẬT MÁY TÍNH
+3.3.1 Rob Lucci
+Lucci là đặc vụ mạnh nhất CP9 với sức mạnh áp đảo và khả năng dứt điểm mục tiêu nhanh
+chóng.
+Yêu cầu: Hiện thực classLuccikế thừa từCP9Agent.
+•Phương thứcattack:
+Sát thương bằng chỉ số tấn công cộng thêm một lượng bằng một phần hai mươi giá trị
+doriki. Nếu mục tiêu có lượng máu nhỏ hơn 50% máu tối đa, sát thương tăng thêm 20%.
+•Phương thứcspecialSkill:
+Lucci sử dụng kỹ năng với chi phí 25 năng lượng, gây sát thương bằng 280% chỉ số tấn
+công. Đòn đánh này bỏ qua 50% phòng thủ của mục tiêu. Nếu kỹ năng hạ gục mục tiêu,
+moralegiảm thêm 10.
+•Phương thứcendTurn:
+Nếu máu hiện tại nhỏ hơn 40% máu tối đa, chỉ số tấn công của Lucci tăng thêm 5%.
+3.3.2 Kaku
+Kaku là kiếm sĩ với lối tấn công liên hoàn vào nhiều mục tiêu.
+Yêu cầu: Hiện thực classKakukế thừa từCP9Agent.
+•Phương thứcattack:
+Sát thương bằng chỉ số tấn công.
+•Phương thứcspecialSkill:
+Kaku sử dụng kỹ năng với chi phí 20 năng lượng, thực hiện ba đòn đánh liên tiếp lên
+cùng một mục tiêu.
+Đòn đầu gây sát thương bằng 120% chỉ số tấn công. Đòn thứ hai gây sát thương bằng
+100% chỉ số tấn công. Đòn thứ ba gây sát thương bằng 80% chỉ số tấn công.
+Ba đòn đánh này được thực hiện tuần tự. Nếu mục tiêu bị hạ gục trước khi kết thúc ba
+đòn, các đòn còn lại sẽ không được thực hiện.
+•Phương thứcendTurn:
+Kaku không có hiệu ứng đặc biệt ở cuối lượt.
+3.3.3 Jabra
+Jabra là chiến binh thiên về phòng thủ và phản đòn.
+Bài tập lớn môn Kỹ thuật lập trình - HK 2 năm học 2025 - 2026 Trang 10/23
+TRƯỜNG ĐẠI HỌC BÁCH KHOA - ĐHQG-HCM
+KHOA KHOA HỌC VÀ KỸ THUẬT MÁY TÍNH
+Yêu cầu: Hiện thực classJabrakế thừa từCP9Agent.
+•Phương thứcattack:
+Sát thương bằng chỉ số tấn công.
+•Phương thứcspecialSkill:
+Jabra sử dụng kỹ năng với chi phí 18 năng lượng, gây sát thương bằng 150% chỉ số tấn
+công.
+Nếu máu hiện tại nhỏ hơn 30% máu tối đa, sát thương của kỹ năng tăng thêm 25%. Nếu
+đòn đánh này hạ gục mục tiêu,moralegiảm thêm 5.
+•Phương thứcendTurn:
+Jabra không có hiệu ứng đặc biệt ở cuối lượt.
+3.3.4 Blueno
+Blueno có khả năng né tránh và tạo lợi thế trong giao tranh.
+Yêu cầu: Hiện thực classBluenokế thừa từCP9Agent.
+•Phương thứcattack:
+Sát thương bằng chỉ số tấn công.
+•Phương thứcspecialSkill:
+Blueno sử dụng kỹ năng với chi phí 15 năng lượng, gây sát thương bằng 130% chỉ số tấn
+công.
+Nếu máu hiện tại của Blueno lớn hơn 50% máu tối đa, sát thương của kỹ năng tăng thêm
+20. Nếu máu hiện tại nhỏ hơn hoặc bằng 50% máu tối đa, sát thương tăng thêm 40.
+•Phương thứcendTurn:
+Blueno không có hiệu ứng đặc biệt ở cuối lượt.
+3.3.5 Kalifa
+Kalifa có khả năng làm suy yếu đối thủ và giảm tinh thần chiến đấu.
+Yêu cầu: Hiện thực classKalifakế thừa từCP9Agent.
+•Phương thứcattack:
+Sát thương bằng chỉ số tấn công.
+•Phương thứcspecialSkill:
+Bài tập lớn môn Kỹ thuật lập trình - HK 2 năm học 2025 - 2026 Trang 11/23
+TRƯỜNG ĐẠI HỌC BÁCH KHOA - ĐHQG-HCM
+KHOA KHOA HỌC VÀ KỸ THUẬT MÁY TÍNH
+Kalifa sử dụng kỹ năng với chi phí 18 năng lượng, gây sát thương bằng 140% chỉ số tấn
+công. Đồng thời làm giảmmorale8 và giảm tốc độ của mục tiêu 6. Nếu mục tiêu là
+Nami,moralegiảm 12 thay vì 8.
+•Phương thứcendTurn:
+Kalifa không có hiệu ứng đặc biệt ở cuối lượt.
+3.3.6 Kumadori
+Kumadori có khả năng gây sát thương ổn định và tăng hiệu quả khi bị dồn ép.
+Yêu cầu: Hiện thực classKumadorikế thừa từCP9Agent.
+•Phương thứcattack:
+Sát thương bằng chỉ số tấn công.
+•Phương thứcspecialSkill:
+Kumadori sử dụng kỹ năng với chi phí 16 năng lượng, gây sát thương bằng 30 cộng thêm
+một lượng bằng một phần mười giá trịdoriki. Nếu máu hiện tại nhỏ hơn 40% máu tối
+đa, sát thương tăng thêm 25.
+•Phương thứcendTurn:
+Kumadori không có hiệu ứng đặc biệt ở cuối lượt.
+3.3.7 Fukurou
+Fukurou có khả năng theo dõi mục tiêu yếu và gia tăng sát thương.
+Yêu cầu: Hiện thực classFukuroukế thừa từCP9Agent.
+•Phương thứcattack:
+Sát thương bằng chỉ số tấn công.
+•Phương thứcspecialSkill:
+Fukurou sử dụng kỹ năng với chi phí 14 năng lượng, gây sát thương bằng 130% chỉ số
+tấn công. Nếu mục tiêu là nhân vật có lượng máu thấp nhất trong phe đối phương, sát
+thương tăng thêm 20. Nếu đòn đánh này hạ gục mục tiêu,moralegiảm thêm 6.
+•Phương thứcendTurn:
+Fukurou không có hiệu ứng đặc biệt ở cuối lượt.
+Bài tập lớn môn Kỹ thuật lập trình - HK 2 năm học 2025 - 2026 Trang 12/23
+TRƯỜNG ĐẠI HỌC BÁCH KHOA - ĐHQG-HCM
+KHOA KHOA HỌC VÀ KỸ THUẬT MÁY TÍNH
+3.4 BattleContext
+BattleContext lưu trữ trạng thái chung của toàn bộ trận đánh tại Enies Lobby. Các nhân vật
+và công trình sẽ thông qua lớp này để cập nhật tiến trình và quyết định kết quả trận chiến.
+Yêu cầu: Hiện thực classBattleContextvới các mô tả sau:
+1. Các thuộc tínhpublic:
+•turnCount: kiểuint, số lượt đã diễn ra.
+•morale: kiểuint, tinh thần của phe Mũ Rơm.
+•alarmLevel: kiểuint, mức báo động tại Enies Lobby.
+•rescueProgress: kiểuint, tiến độ giải cứu Robin.
+•escapeProgress: kiểuint, tiến độ rút lui khỏi Enies Lobby.
+•busterCallTimer: kiểuint, số lượt còn lại trước khi Buster Call xảy ra.
+•mainGateDestroyed: kiểubool, xác định cổng chính đã bị phá hay chưa. Mặc định
+làfalse.
+•robinRescued: kiểubool, xác định Robin đã được giải cứu hay chưa. Mặc định là
+false.
+•bridgeOpened: kiểubool, xác định cầu thoát hiểm đã được mở hay chưa. Mặc định
+làfalse.
+•battleEnded: kiểubool, xác định trận đánh đã kết thúc hay chưa. Mặc định là
+false.
+•resultCode: kiểustring, kết quả cuối cùng của trận đánh.
+2. Constructor khởi tạo toàn bộ các giá trị.
+3. Phương thứcnextTurntăngturnCountthêm 1 sau mỗi lượt.
+1void nextTurn () ;
+3.5 Building
+Các công trình tại Enies Lobby được mô hình hóa thông qua lớp trừu tượngBuilding. Các
+công trình không tham gia trực tiếp vào lượt đánh, nhưng sẽ tác động đến trạng thái trận chiến
+thông quaBattleContext.
+Yêu cầu: Hiện thực abstract classBuildingvới các mô tả sau:
+1. Các thuộc tínhprotected:
+Bài tập lớn môn Kỹ thuật lập trình - HK 2 năm học 2025 - 2026 Trang 13/23
+TRƯỜNG ĐẠI HỌC BÁCH KHOA - ĐHQG-HCM
+KHOA KHOA HỌC VÀ KỸ THUẬT MÁY TÍNH
+•name: kiểustring, tên công trình.
+•hp: kiểuint, độ bền hiện tại.
+•maxHP: kiểuint, độ bền tối đa.
+•destroyed: kiểubool, xác định công trình đã bị phá hay chưa.
+2. Constructor nhận các tham sốnamevàhp. Giá trịmaxHPđược gán bằnghpban đầu. Nếu
+hplớn hơn 0 thìdestroyedđược gán làfalse, ngược lại làtrue.
+1Building ( string name , int hp ) ;
+3. Phương thức hủy ảo.
+1virtual ~ Building () ;
+4. Phương thứcreceiveDamagedùng để giảm độ bền của công trình. Nếu sau khi nhận sát
+thương,hpnhỏ hơn hoặc bằng 0,hpđược gán bằng 0 vàdestroyedđược gán làtrue.
+1void r e c e i v e D a m a g e ( int damage ) ;
+5. Phương thứcisDestroyedtrả về trạng thái của công trình.
+1bool i s D e s t r o y e d () const ;
+6. Pure virtual methodapplyEffectđược gọi sau mỗi lượt để áp dụng hiệu ứng của công
+trình lênBattleContext.
+1virtual void a p p l y E f f e c t ( B a t t l e C o n t e x t & context ) = 0;
+7. Phương thứconDestroyedđược gọi khi công trình vừa bị phá hủy để cập nhật trạng thái
+trongBattleContext.
+1virtual void o n D e s t r o y e d ( B a t t l e C o n t e x t & context ) ;
+8. Phương thứcstr:
+1virtual string str () const ;
+Trả về chuỗi biểu diễn thông tin của công trình. Chuỗi trả về có định dạng như sau:
+1Building [ name = < name > , hp = < hp > , maxHP = < maxHP > , d est ro ye d = < destroyed >]
+Các giá trị được in liền nhau, phân tách bằng dấu phẩy và không có khoảng trắng dư
+thừa ngoài định dạng đã cho. Giá trịdestroyedđược in dưới dạngtruehoặcfalse.
+Ví dụ:
+1Building [ name = MainGate , hp =0 , maxHP =200 , d es tr oy ed = true ]
+3.5.1 MainGate
+MainGate là cổng chính của Enies Lobby, là rào cản đầu tiên của băng Mũ Rơm.
+Yêu cầu: Hiện thực classMainGatekế thừa từBuilding.
+Bài tập lớn môn Kỹ thuật lập trình - HK 2 năm học 2025 - 2026 Trang 14/23
+TRƯỜNG ĐẠI HỌC BÁCH KHOA - ĐHQG-HCM
+KHOA KHOA HỌC VÀ KỸ THUẬT MÁY TÍNH
+•Phương thứcapplyEffect:
+Nếu MainGate chưa bị phá, tiến độ giải cứu Robin không tăng trong lượt này.
+•Phương thứconDestroyed:
+Khi MainGate bị phá,mainGateDestroyedđược gán làtrue,rescueProgresstăng thêm
+20 vàmoraletăng thêm 5.
+3.5.2 Courthouse
+Courthouse là khu vực trung tâm làm tăng mức báo động.
+Yêu cầu: Hiện thực classCourthousekế thừa từBuilding.
+•Phương thứcapplyEffect:
+Nếu Courthouse chưa bị phá,alarmLeveltăng thêm 5 sau mỗi lượt.
+•Phương thứconDestroyed:
+Khi bị phá,alarmLevelgiảm 20 và không còn tăng trong các lượt tiếp theo.
+3.5.3 TowerOfJustice
+TowerOfJustice là nơi giam giữ Robin.
+Yêu cầu: Hiện thực classTowerOfJusticekế thừa từBuilding.
+•Phương thứcapplyEffect:
+NếumainGateDestroyedlàtruevà Robin chưa được cứu,rescueProgresstăng thêm
+5 sau mỗi lượt.
+NếurescueProgresslớn hơn hoặc bằng 100,robinRescuedđược gán làtruevàmorale
+tăng thêm 10.
+3.5.4 BridgeOfHesitation
+BridgeOfHesitation là con đường rút lui khỏi Enies Lobby.
+Yêu cầu: Hiện thực classBridgeOfHesitationkế thừa từBuilding.
+•Phương thứcapplyEffect:
+NếurobinRescuedlàtrue,bridgeOpenedđược gán làtruevàescapeProgresstăng
+thêm 5 mỗi lượt.
+NếuescapeProgresslớn hơn hoặc bằng 100, trận đánh kết thúc với kết quảSTRAW_HAT_WIN.
+Bài tập lớn môn Kỹ thuật lập trình - HK 2 năm học 2025 - 2026 Trang 15/23
+TRƯỜNG ĐẠI HỌC BÁCH KHOA - ĐHQG-HCM
+KHOA KHOA HỌC VÀ KỸ THUẬT MÁY TÍNH
+3.5.5 BusterCallShip
+BusterCallShip đại diện cho áp lực thời gian của trận đánh.
+Yêu cầu: Hiện thực classBusterCallShipkế thừa từBuilding.
+•Phương thứcapplyEffect:
+Nếu công trình chưa bị phá,busterCallTimergiảm 1 sau mỗi lượt.
+NếubusterCallTimernhỏ hơn hoặc bằng 0, trận đánh kết thúc với kết quảBUSTER_CALL.
+•Phương thứconDestroyed:
+Khi công trình bị phá,busterCallTimertăng thêm 3.
+3.6 EniesLobbyBattle
+LớpEniesLobbyBattlelà lớp quản lý toàn bộ trận đánh tại Enies Lobby. Lớp này chịu trách
+nhiệm đọc dữ liệu khởi tạo, quản lý danh sách nhân vật, quản lý các công trình, điều phối lượt
+đánh, cập nhật trạng thái trongBattleContextvà xác định kết quả cuối cùng của trận chiến.
+Yêu cầu: Hiện thực classEniesLobbyBattlevới các mô tả sau:
+1. Các thuộc tínhprivate:
+•strawHats: kiểuCharacter**, mảng động lưu các nhân vật thuộc băng Mũ Rơm.
+Số lượng nhân vật của băng Mũ Rơm không quá 7.
+•strawHatCount: kiểuint, số lượng nhân vật băng Mũ Rơm hiện có.
+•cp9Agents: kiểuCharacter**, mảng động lưu các đặc vụ CP9. Số lượng đặc vụ
+không quá 7.
+•cp9Count: kiểuint, số lượng đặc vụ CP9 hiện có.
+•buildings: kiểuBuilding**, mảng động lưu các công trình trên chiến trường. Số
+lượng công trình không quá 5.
+•buildingCount: kiểuint, số lượng công trình hiện có.
+•turnOrder: danh sách liên kết đơn quản lý thứ tự hành động của các nhân vật.
+•context: kiểuBattleContext, trạng thái hiện tại của trận đánh.
+•maxTurns: kiểuint, số lượt tối đa của trận đánh.
+2. Constructor nhận vào đường dẫn đến tập tin cấu hình. Constructor này gọi phương thức
+loadFromFileđể đọc dữ liệu và khởi tạo trận đánh.
+1E n i e s L o b b y B a t t l e ( const string & filename ) ;
+Bài tập lớn môn Kỹ thuật lập trình - HK 2 năm học 2025 - 2026 Trang 16/23
+TRƯỜNG ĐẠI HỌC BÁCH KHOA - ĐHQG-HCM
+KHOA KHOA HỌC VÀ KỸ THUẬT MÁY TÍNH
+3. Destructor có nhiệm vụ giải phóng toàn bộ vùng nhớ đã cấp phát động cho các nhân vật,
+công trình, mảng động và danh sách liên kết.
+1~ E n i e s L o b b y B a t t l e () ;
+4. Phương thứcloadFromFileđọc dữ liệu từ tập tin có tênfilenamevà khởi tạo toàn bộ
+trận đánh.
+1void l o a d F r o m F i l e ( const string & filename ) ;
+Tập tin đầu vào gồm nhiều dòng, mỗi dòng mô tả một nhóm dữ liệu. Các dòng có thể
+xuất hiện theo thứ tự bất kỳ, nhưng phải tuân theo một trong các định dạng sau:
+1CONTEXT morale a l a r m L e v e l r e s c u e P r o g r e s s e s c a p e P r o g r e s s b u s t e r C a l l T i m e r
+maxTurns
+2STR AW _H AT name hp atk def speed energy bounty
+3CP9 name hp atk def speed energy doriki
+4BUILDING name hp
+Trong đó, dòngCONTEXTdùng để khởi tạo các giá trị ban đầu củaBattleContextvà
+maxTurns. DòngSTRAW_HATdùng để tạo nhân vật thuộc băng Mũ Rơm. DòngCP9dùng
+để tạo đặc vụ CP9. DòngBUILDINGdùng để tạo công trình trên chiến trường.
+Sau khi đọc xong dữ liệu hợp lệ, phương thức phải xây dựngturnOrderbằng cách gọi
+buildTurnOrder.
+5. Phương thứcaddStrawHatthêm một nhân vật băng Mũ Rơm vào mảng độngstrawHats
+1void a d d S t r a w H a t ( Ch ara ct er * ch ar ac te r ) ;
+6. Phương thứcaddCP9Agentthêm một đặc vụ CP9 vào mảng độngcp9Agents.
+1void a d d C P 9 A g e n t ( Ch ara ct er * ch ar ac te r ) ;
+7. Phương thứcaddBuildingthêm một công trình vào mảng độngbuildings.
+1void a d d B u i l d i n g ( Building * building ) ;
+8. Phương thứcbuildTurnOrderxây dựng danh sách lượt đánh. Danh sách này chỉ chứa
+các con trỏ kiểuCharacter*; các công trình không nằm trong danh sách lượt đánh.
+1void b u i l d T u r n O r d e r () ;
+Thứ tự ban đầu củaturnOrderđược tạo theo quy tắc: tất cả nhân vật băng Mũ Rơm
+theo thứ tự đọc từ file được đưa vào trước, sau đó đến tất cả đặc vụ CP9 theo thứ tự
+đọc từ file.
+Mỗi node trong danh sách liên kết chứa một con trỏCharacter*và một con trỏ đến node
+kế tiếp.
+9. Phương thứcrunBattlethực hiện toàn bộ trận đánh.
+1void r un Bat tl e () ;
+Bài tập lớn môn Kỹ thuật lập trình - HK 2 năm học 2025 - 2026 Trang 17/23
+TRƯỜNG ĐẠI HỌC BÁCH KHOA - ĐHQG-HCM
+KHOA KHOA HỌC VÀ KỸ THUẬT MÁY TÍNH
+Trận đánh được xử lý theo từng lượt cho đến khibattleEndedbằngtruehoặc số lượt
+đạtmaxTurns. Quy trình xử lý mỗi lượt được thực hiện theo các bước sau:
+(a) Lấy nhân vật đầu tiên trongturnOrder.
+(b) Nếu nhân vật đã bị hạ, bỏ qua lượt của nhân vật này và chuyển sang bước tiếp theo.
+(c) Nếu nhân vật còn sống:
+•Xác định mục tiêu theo đúng quy tắc chọn mục tiêu.
+•Nếu nhân vật còn đủ năng lượng, thực hiệnspecialSkill.
+•Ngược lại, thực hiệnattack.
+•Sau khi hành động kết thúc, gọiendTurn.
+(d) Đưa node hiện tại xuống cuối danh sáchturnOrder.
+(e) GọiprocessBuildingsđể áp dụng hiệu ứng của tất cả công trình.
+(f) TăngturnCountthêm 1.
+(g) GọicheckEndConditionđể kiểm tra trạng thái trận đánh.
+Nếu số lượt đạtmaxTurnsmà trận đánh chưa kết thúc,battleEndedđược gán làtrue
+vàresultCodeđược gán làTIME_OUT.
+10. Phương thứcprocessTurnxử lý lượt hành động của một nhân vật.
+1void p r o c e s s T u r n ( Ch ara ct er * ch ar ac te r ) ;
+Nếucharacterkhông còn sống thì không thực hiện hành động. Nếucharacterthuộc
+băng Mũ Rơm, mục tiêu được chọn theo quy tắc chọn mục tiêu của Straw Hat. Nếu
+characterthuộc CP9, mục tiêu được chọn theo quy tắc chọn mục tiêu của CP9.
+Nếu mục tiêu là nhân vật, sát thương được áp dụng lên mục tiêu thông quareceiveDamage.
+Nếu mục tiêu là công trình, sát thương được áp dụng lên công trình thông quareceiveDamage;
+nếu công trình vừa bị phá, gọionDestroyedcủa công trình đó.
+11. Phương thứcprocessBuildingsgọi hiệu ứng của toàn bộ công trình sau mỗi lượt hành
+động.
+1void p r o c e s s B u i l d i n g s () ;
+Với mỗi công trình trong mảngbuildings, gọi phương thứcapplyEffect. Nếu công trình
+đã bị phá, hiệu ứng chính của công trình đó không còn được áp dụng.
+12. Phương thứccheckEndConditionkiểm tra điều kiện kết thúc trận đánh.
+1void c h e c k E n d C o n d i t i o n () ;
+Các điều kiện kết thúc trận đánh được kiểm tra theo thứ tự sau:
+Bài tập lớn môn Kỹ thuật lập trình - HK 2 năm học 2025 - 2026 Trang 18/23
+TRƯỜNG ĐẠI HỌC BÁCH KHOA - ĐHQG-HCM
+KHOA KHOA HỌC VÀ KỸ THUẬT MÁY TÍNH
+Thứ tự Điều kiện Kết quả
+1robinRescued = truevàescapeProgress
+>= 100
+STRAW_HAT_WIN
+2busterCallTimer <= 0 BUSTER_CALL
+3 Toàn bộ nhân vật trongstrawHatsđã bị hạCP9_WIN
+4 Toàn bộ nhân vật trongcp9Agentsđã bị hạSTRAW_HAT_WIN_BY_DEFEAT_CP9
+5turnCount >= maxTurns TIME_OUT
+13. Phương thứcgetResulttrả về chuỗi kết quả sau khi trận đánh kết thúc.
+1string g etR es ul t () const ;
+Chuỗi kết quả có định dạng:
+1r e s u l t C o d e tu rn Co un t morale a l a r m L e v e l r e s c u e P r o g r e s s e s c a p e P r o g r e s s
+b u s t e r C a l l T i m e r
+Ví dụ:
+1S T R A W _ H A T _ W I N 32 78 25 100 100 4
+Các quy tắc của trận chiến:
+1. Quy tắc chọn mục tiêu của băng Mũ Rơm. Trong lượt của một nhân vật thuộc băng Mũ
+Rơm, mục tiêu được chọn theo thứ tự ưu tiên sau:
+•NếumainGatechưa bị phá, mục tiêu làMainGate.
+•NếuMainGateđã bị phá,alarmLevellớn hơn hoặc bằng 50 vàCourthousechưa bị
+phá, mục tiêu làCourthouse.
+•Nếu hai điều kiện trên không thỏa,busterCallTimernhỏ hơn hoặc bằng 5 và
+BusterCallShipchưa bị phá, mục tiêu làBusterCallShip.
+•Nếu các điều kiện trên không thỏa và Robin chưa được giải cứu, mục tiêu là đặc vụ
+CP9 còn sống đầu tiên trong mảngcp9Agents.
+•Nếu Robin đã được cứu, mục tiêu làBridgeOfHesitation. Trong trường hợp này,
+hành động của nhân vật có thể được xem là hỗ trợ mở đường rút lui; nếu công trình
+này đã bị phá hoặc không tồn tại, nhân vật sẽ tấn công CP9 còn sống đầu tiên.
+•Nếu nhân vật hiện tại là Chopper và đủ năng lượng dùngspecialSkill, mục tiêu
+là thành viên băng Mũ Rơm còn sống có hp thấp nhất.
+2. Quy tắc chọn mục tiêu của CP9: trong lượt của một đặc vụ CP9, mục tiêu luôn là thành
+viên băng Mũ Rơm còn sống đầu tiên trong mảngstrawHats. CP9 không tấn công công
+trình.
+Bài tập lớn môn Kỹ thuật lập trình - HK 2 năm học 2025 - 2026 Trang 19/23
+TRƯỜNG ĐẠI HỌC BÁCH KHOA - ĐHQG-HCM
+KHOA KHOA HỌC VÀ KỸ THUẬT MÁY TÍNH
+3. Quy tắc sử dụng kỹ năng:
+•Ở lượt của một nhân vật, nếu nhân vật còn đủ năng lượng để sử dụngspecialSkill,
+nhân vật sẽ dùngspecialSkill. Nếu không đủ năng lượng, nhân vật sẽ dùng
+attack.
+•Chi phí năng lượng của từng kỹ năng được mô tả trong phần lớp nhân vật cụ thể.
+Sau khi dùng kỹ năng, năng lượng của nhân vật phải giảm đúng bằng chi phí tương
+ứng. Nếu không đủ năng lượng, kỹ năng không được thực hiện.
+4. Quy tắc tấn công nhân vật:
+•Khi mục tiêu là một nhân vật, sát thương doattackhoặcspecialSkilltạo ra
+được áp dụng lên mục tiêu. Nếu sau khi nhận sát thương, máu của mục tiêu nhỏ
+hơn hoặc bằng 0, máu của mục tiêu được gán bằng 0 và mục tiêu được xem là bị hạ.
+•Nếu người tấn công thuộc băng Mũ Rơm và hạ gục mục tiêu,moraletăng thêm 5.
+Nếu người tấn công thuộc CP9 và hạ gục mục tiêu,moralegiảm 5.
+4 Yêu cầu
+Để hoàn thành bài tập lớn này, sinh viên phải:
+1. Đọc toàn bộ tập tin mô tả này.
+2. Tải xuống tập tin initial.zip và giải nén nó. Sau khi giải nén, sinh viên sẽ nhận được
+các tập tin: main.cpp, main.h, eniesLobby.h, eniesLobby.cpp, và các file dữ liệu đọc mẫu.
+Sinh viên phải nộp 2 tập tin là eniesLobby.h và eniesLobby.cpp nên không được sửa đổi
+tập tin main.h khi chạy thử chương trình.
+3. Sinh viên sử dụng câu lệnh sau để biên dịch:
+g++ -o main main.cpp eniesLobby.cpp -I . -std=c++11
+Sinh viên sử dụng câu lệnh sau để chạy chương trình:
+./main
+Các câu lệnh trên được dùng trong command prompt/terminal để biên dịch và chạy
+chương trình. Nếu sinh viên dùng IDE để chạy chương trình, sinh viên cần chú ý: thêm
+đầy đủ các tập tin vào project/workspace của IDE; thay đổi lệnh biên dịch của IDE cho
+phù hợp. IDE thường cung cấp các nút (button) cho việc biên dịch (Build) và chạy chương
+trình (Run). Khi nhấn Build IDE sẽ chạy một câu lệnh biên dịch tương ứng, thông thường
+câu lệnh chỉ biên dịch file main.cpp. Sinh viên cần tìm cách cấu hình trên IDE để thay
+đổi lệnh biên dịch: thêm file eniesLobby.cpp, thêm option -std=c++11, -I .
+Bài tập lớn môn Kỹ thuật lập trình - HK 2 năm học 2025 - 2026 Trang 20/23
+TRƯỜNG ĐẠI HỌC BÁCH KHOA - ĐHQG-HCM
+KHOA KHOA HỌC VÀ KỸ THUẬT MÁY TÍNH
+4. Chương trình sẽ được chấm trên nền tảng Unix. Nền tảng chấm và trình biên dịch của
+sinh viên có thể khác với nơi chấm thực tế. Nơi nộp bài trên LMS được cài đặt để giống
+với nơi chấm thực tế. Sinh viên phải chạy thử chương trình trên nơi nộp bài và phải sửa
+tất cả các lỗi xảy ra ở nơi nộp bài LMS để có đúng kết quả khi chấm thực tế.
+5. Sửa đổi các file eniesLobby.h, eniesLobby.cpp để hoàn thành bài tập lớn này và đảm bảo
+hai yêu cầu sau:
+•Chỉ có 1 lệnhincludetrong tập tin eniesLobby.h là#include "main.h"và một in-
+clude trong tập tin eniesLobby.cpp là#include "eniesLobby.h". Ngoài ra, không
+cho phép có một#includenào khác trong các tập tin này.
+•Hiện thực các hàm được mô tả ở các Nhiệm vụ trong BTL này.
+•Hoàn thiện các class để đảm bảo các tính chất cơ bản của lập trình hướng đối tượng
+6. Sinh viên được khuyến khích viết thêm các class và các hàm để hoàn thành BTL này.
+7. Sinh viên bắt buộc phải cung cấp phần hiện thực cho tất cả các class và phương thức
+được liệt kê trong BTL này. Nếu không thì SV sẽ bị 0 điểm. Nếu đó là class hoặc phương
+thức mà SV chưa thể giải quyết được, thì SV phải cung cấp phần hiện thực rỗng chỉ gồm
+cặp dấu mở đóng ngoặc nhọn {}.
+5 Nộp bài
+Sinh viên chỉ nộp 2 tập tin: eniesLobby.h và eniesLobby.cpp, trước thời hạn được đưa ra trong
+đường dẫn "Assignment 2 - Submission". Có một số testcase đơn giản được sử dụng để kiểm
+tra bài làm của sinh viên nhằm đảm bảo rằng kết quả của sinh viên có thể biên dịch và chạy
+được. Sinh viên có thể nộp bài bao nhiêu lần tùy ý nhưng chỉ có bài nộp cuối cùng được tính
+điểm. Vì hệ thống không thể chịu tải khi quá nhiều sinh viên nộp bài cùng một lúc, vì vậy sinh
+viên nên nộp bài càng sớm càng tốt. Sinh viên sẽ tự chịu rủi ro nếu nộp bài sát hạn chót. Khi
+quá thời hạn nộp bài, hệ thống sẽ đóng nên sinh viên sẽ không thể nộp nữa. Bài nộp qua các
+phương thức khác đều không được chấp nhận.
+6 Một số quy định khác
+•Sinh viên phải tự mình hoàn thành bài tập lớn này và phải ngăn không cho người khác
+đánh cắp kết quả của mình. Nếu không, sinh viên sẽ bị xử lý theo quy định của trường
+vì gian lận.
+•Mọi quyết định của giảng viên phụ trách bài tập lớn là quyết định cuối cùng.
+Bài tập lớn môn Kỹ thuật lập trình - HK 2 năm học 2025 - 2026 Trang 21/23
+TRƯỜNG ĐẠI HỌC BÁCH KHOA - ĐHQG-HCM
+KHOA KHOA HỌC VÀ KỸ THUẬT MÁY TÍNH
+•Sinh viên không được cung cấp testcase sau khi chấm bài, sinh viên sẽ được cung cấp
+phân bố điểm của BTL.
+7 Gian lận
+Bài tập lớn phải được sinh viên TỰ LÀM. Sinh viên sẽ bị coi là gian lận nếu:
+•Có sự giống nhau bất thường giữa mã nguồn của các bài nộp. Trong trường hợp này, TẤT
+CẢ các bài nộp đều bị coi là gian lận. Do vậy sinh viên phải bảo vệ mã nguồn bài tập
+lớn của mình.
+•Bài của sinh viên bị sinh viên khác nộp lên.
+•Sinh viên không hiểu mã nguồn do chính mình viết, trừ những phần mã được cung cấp
+sẵn trong chương trình khởi tạo. Sinh viên có thể tham khảo từ bất kỳ nguồn tài liệu
+nào, tuy nhiên phải đảm bảo rằng mình hiểu rõ ý nghĩa của tất cả những dòng lệnh mà
+mình viết. Trong trường hợp không hiểu rõ mã nguồn của nơi mình tham khảo, sinh viên
+được đặc biệt cảnh báo là KHÔNG ĐƯỢC sử dụng mã nguồn này; thay vào đó nên sử
+dụng những gì đã được học để viết chương trình.
+•Nộp nhầm bài của sinh viên khác trên tài khoản cá nhân của mình.
+•Sử dụng mã nguồn từ các công cụ có khả năng tạo ra mã nguồn mà không hiểu ý nghĩa.
+Trong trường hợp bị kết luận là gian lận, sinh viên sẽ bị điểm 0 cho toàn bộ môn học
+(không chỉ bài tập lớn).
+KHÔNG CHẤP NHẬN GIẢI THÍCH NÀO V À KHÔNG CÓ NGOẠI LỆ!
+Sau mỗi bài tập lớn được nộp, sẽ có một số sinh viên được gọi phỏng vấn ngẫu nhiên để
+chứng minh rằng bài tập lớn vừa được nộp là do chính mình làm.
+8 Kết luận
+Trận chiến tại Enies Lobby đánh dấu một trong những khoảnh khắc quan trọng nhất của băng
+Mũ Rơm, khi họ sẵn sàng đối đầu trực diện với Chính phủ Thế giới để giải cứu Nico Robin.
+Từ việc phá vỡ cổng chính, tiến vào tòa án, cho đến cuộc đối đầu với các đặc vụ CP9 và cuộc
+chạy đua với thời gian trước khi Buster Call được kích hoạt, toàn bộ diễn biến đã tạo nên một
+chuỗi sự kiện căng thẳng và đầy kịch tính.
+Trong bài tập này, sinh viên được tái hiện lại những diễn biến đó thông qua việc xây dựng
+các đối tượng và quy tắc tương tác trong chương trình, qua đó hình dung rõ hơn cách một câu
+chuyện có thể được mô hình hóa thành một hệ thống có cấu trúc.
+Bài tập lớn môn Kỹ thuật lập trình - HK 2 năm học 2025 - 2026 Trang 22/23
+TRƯỜNG ĐẠI HỌC BÁCH KHOA - ĐHQG-HCM
+KHOA KHOA HỌC VÀ KỸ THUẬT MÁY TÍNH
+CHÚC CÁC BẠN GIẢI CỨU THÀNH CÔNG ROBIN!
+Bài tập lớn môn Kỹ thuật lập trình - HK 2 năm học 2025 - 2026 Trang 23/23
